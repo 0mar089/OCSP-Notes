@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
+                "file": "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Hedgehog"
+              "title": "Cheat Sheet"
             }
           }
         ]
@@ -195,6 +195,11 @@
   },
   "active": "c2e73ec7ae759669",
   "lastOpenFiles": [
+    "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md",
+    "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md",
+    "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal",
+    "Pentesting Notes/Web/Vulnerabilities/Sin título.md",
+    "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
     "Laboratorios/DockerLabs/Facil/ApiBase.md",
     "Pentesting Notes/1_Enumeration/Oracle TNS.md",
     "Pentesting Notes/1_Enumeration/NFS.md",
@@ -210,7 +215,6 @@
     "Pentesting Notes/File Tranfer/Linux.md",
     "Pentesting Notes/File Tranfer/General.md",
     "Pentesting Notes/Web/Fuzzing/Gobuster.md",
-    "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md",
     "Pentesting Notes/Web/Vulnerabilities",
     "Pentesting Notes/Web/Fuzzing",
     "ShortCuts Kali.md",
@@ -232,14 +236,10 @@
     "Laboratorios/BugBountyLabs",
     "Laboratorios/DockerLabs",
     "Pentesting Notes/1_Enumeration/RDP&WinRM&WMI.md",
-    "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
     "Pentesting Notes/File Tranfer",
     "Pentesting Notes/1_Enumeration/SNMP.md",
     "Pentesting Notes/1_Enumeration/SMTP.md",
     "Pentesting Notes/1_Enumeration/SSH.md",
-    "Pentesting Notes/1_Enumeration/SMB.md",
-    "Laboratorios/DockerLabs/MuyFacil/Vacaciones.md",
-    "Pentesting Notes/1_Enumeration",
-    "Laboratorios/DockerLabs/MuyFacil/Obsession.md"
+    "Pentesting Notes/1_Enumeration/SMB.md"
   ]
 }
