@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "e82ce6e11509987e",
+        "id": "98528bf66b834c57",
         "type": "tabs",
         "children": [
           {
-            "id": "8dbb636b809fbd44",
+            "id": "c2e73ec7ae759669",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Laboratorios/DockerLabs/Facil/ApiBase.md",
+                "file": "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ApiBase"
+              "title": "Hedgehog"
             }
           }
         ]
@@ -44,7 +44,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "Explorador de archivos"
             }
           },
           {
@@ -183,18 +183,40 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "bases:Create new base": false,
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Crear nueva base": false,
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "8dbb636b809fbd44",
+  "active": "c2e73ec7ae759669",
   "lastOpenFiles": [
+    "Laboratorios/DockerLabs/Facil/ApiBase.md",
+    "Pentesting Notes/1_Enumeration/Oracle TNS.md",
+    "Pentesting Notes/1_Enumeration/NFS.md",
+    "Pentesting Notes/1_Enumeration/MySQL.md",
+    "Pentesting Notes/1_Enumeration/MSSQL.md",
+    "Pentesting Notes/1_Enumeration/IPMI.md",
+    "Pentesting Notes/1_Enumeration/IMAPvsPOP3.md",
+    "Pentesting Notes/1_Enumeration/HTTP & HTTPS.md",
+    "Pentesting Notes/1_Enumeration/FTP.md",
+    "Pentesting Notes/1_Enumeration/DNS.md",
+    "Pentesting Notes/1_Enumeration/1. Service Scanning.md",
+    "Pentesting Notes/File Tranfer/Windows.md",
+    "Pentesting Notes/File Tranfer/Linux.md",
+    "Pentesting Notes/File Tranfer/General.md",
+    "Pentesting Notes/Web/Fuzzing/Gobuster.md",
+    "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md",
+    "Pentesting Notes/Web/Vulnerabilities",
+    "Pentesting Notes/Web/Fuzzing",
+    "ShortCuts Kali.md",
+    "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection",
+    "Pentesting Notes/OWSAP/Sin nombre",
+    "Pentesting Notes/Web",
     "assets/Pasted image 20260222173217.png",
     "assets/Pasted image 20260222173100.png",
     "assets/Pasted image 20260222172119.png",
@@ -205,41 +227,19 @@
     "assets/Pasted image 20260222170549.png",
     "assets/Pasted image 20260222170501.png",
     "assets/Pasted image 20260222170431.png",
-    "Laboratorios/DockerLabs/Facil/ApiBase.md",
     "Laboratorios/DockerLabs/Facil",
     "Laboratorios/DockerLabs/MuyFacil/Untitled.md",
     "Laboratorios/BugBountyLabs",
     "Laboratorios/DockerLabs",
-    "Pentesting Notes/File Tranfer/Linux.md",
-    "Pentesting Notes/File Tranfer/Windows.md",
     "Pentesting Notes/1_Enumeration/RDP&WinRM&WMI.md",
-    "Pentesting Notes/File Tranfer/General.md",
     "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
-    "assets/Pasted image 20260218194326.png",
-    "ShortCuts Kali.md",
     "Pentesting Notes/File Tranfer",
     "Pentesting Notes/1_Enumeration/SNMP.md",
     "Pentesting Notes/1_Enumeration/SMTP.md",
-    "Pentesting Notes/1_Enumeration/IPMI.md",
-    "Pentesting Notes/1_Enumeration/IMAPvsPOP3.md",
     "Pentesting Notes/1_Enumeration/SSH.md",
-    "Pentesting Notes/1_Enumeration/MSSQL.md",
-    "Pentesting Notes/1_Enumeration/NFS.md",
     "Pentesting Notes/1_Enumeration/SMB.md",
-    "Pentesting Notes/1_Enumeration/DNS.md",
-    "Pentesting Notes/1_Enumeration/FTP.md",
     "Laboratorios/DockerLabs/MuyFacil/Vacaciones.md",
-    "Pentesting Notes/1_Enumeration/Oracle TNS.md",
-    "Pentesting Notes/1_Enumeration/MySQL.md",
-    "Pentesting Notes/1_Enumeration/HTTP & HTTPS.md",
-    "Pentesting Notes/1_Enumeration/1. Service Scanning.md",
     "Pentesting Notes/1_Enumeration",
-    "Pentesting Notes",
-    "Laboratorios/DockerLabs/MuyFacil/Obsession.md",
-    "assets",
-    "DockerLabs/MuyFacil/Capturas",
-    "Laboratorios/DockerLabs/MuyFacil",
-    "Laboratorios",
-    "RDP/WinRM/WMI.md"
+    "Laboratorios/DockerLabs/MuyFacil/Obsession.md"
   ]
 }
