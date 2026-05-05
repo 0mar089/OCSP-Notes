@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md",
+                "file": "Pentesting Notes/Web/Vulnerabilities/03-SSRF/Cheat Sheet.md",
                 "mode": "source",
                 "source": false
               },
@@ -195,8 +195,10 @@
   },
   "active": "c2e73ec7ae759669",
   "lastOpenFiles": [
-    "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md",
     "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md",
+    "Pentesting Notes/Web/Vulnerabilities/03-SSRF/Cheat Sheet.md",
+    "Pentesting Notes/Web/Vulnerabilities/03-SSRF",
+    "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md",
     "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal",
     "Pentesting Notes/Web/Vulnerabilities/Sin título.md",
     "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
@@ -236,10 +238,8 @@
     "Laboratorios/BugBountyLabs",
     "Laboratorios/DockerLabs",
     "Pentesting Notes/1_Enumeration/RDP&WinRM&WMI.md",
-    "Pentesting Notes/File Tranfer",
     "Pentesting Notes/1_Enumeration/SNMP.md",
     "Pentesting Notes/1_Enumeration/SMTP.md",
-    "Pentesting Notes/1_Enumeration/SSH.md",
-    "Pentesting Notes/1_Enumeration/SMB.md"
+    "Pentesting Notes/1_Enumeration/SSH.md"
   ]
 }
