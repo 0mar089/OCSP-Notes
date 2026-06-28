@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Laboratorios/DockerLabs/Facil/Gotham.md",
+                "file": "Laboratorios/DockerLabs/Facil/Elevator.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Gotham"
+              "title": "Elevator"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 250.5
   },
   "right": {
     "id": "7b6263242ad0ccc6",
@@ -179,7 +179,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 281.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -195,51 +195,51 @@
   },
   "active": "c2e73ec7ae759669",
   "lastOpenFiles": [
-    "assets/Pasted image 20260624175904.png",
-    "assets/Pasted image 20260624175834.png",
-    "assets/Pasted image 20260624175751.png",
-    "Sin título.md",
+    "assets/Pasted image 20260629004257.png",
+    "assets/Pasted image 20260629004152.png",
+    "assets/Pasted image 20260629004146.png",
+    "assets/Pasted image 20260629004141.png",
+    "assets/Pasted image 20260629003728.png",
+    "assets/Pasted image 20260629003522.png",
+    "assets/Pasted image 20260629003305.png",
+    "assets/Pasted image 20260629003156.png",
+    "assets/Pasted image 20260629002235.png",
+    "assets/Pasted image 20260629002211.png",
+    "assets/Pasted image 20260629002120.png",
     "Laboratorios/DockerLabs/Facil/Gotham.md",
-    "assets/Pasted image 20260624175652.png",
-    "assets/Pasted image 20260624175607.png",
-    "assets/Pasted image 20260624175510.png",
-    "assets/Pasted image 20260624175448.png",
-    "assets/Pasted image 20260624175424.png",
-    "assets/Pasted image 20260624175241.png",
-    "assets/Pasted image 20260624175110.png",
-    "assets/Pasted image 20260624175005.png",
+    "Pentesting Notes/1_Enumeration/1. Service Scanning.md",
+    "Laboratorios/DockerLabs/Facil/Elevator.md",
+    "Laboratorios/DockerLabs/Facil/ApiBase.md",
+    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Enumeration.md",
+    "Pentesting Notes/1_Enumeration/RDP&WinRM&WMI.md",
+    "Pentesting Notes/1_Enumeration/SMTP.md",
+    "Pentesting Notes/1_Enumeration/Oracle TNS.md",
+    "Pentesting Notes/1_Enumeration/MySQL.md",
+    "Pentesting Notes/1_Enumeration/DNS.md",
+    "Pentesting Notes/Web/Vulnerabilities/03-SSRF/Cheat Sheet.md",
+    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation",
+    "Pentesting Notes/2_Explotation",
+    "Pentesting Notes/3_Post-Explotation",
+    "Sin título.md",
     "Pentesting Notes/File Tranfer/General.md",
     "Pentesting Notes/Web/Fuzzing/Gobuster.md",
     "Laboratorios/DockerLabs/MuyFacil/Trust.md",
     "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
     "Pentesting Notes/1_Enumeration/SNMP.md",
-    "Pentesting Notes/1_Enumeration/SMTP.md",
     "Pentesting Notes/1_Enumeration/SSH.md",
-    "Pentesting Notes/1_Enumeration/1. Service Scanning.md",
     "Laboratorios/DockerLabs/MuyFacil/Vacaciones.md",
     "Laboratorios/DockerLabs/MuyFacil/Tproot.md",
     "Laboratorios/DockerLabs/MuyFacil/Obsession.md",
     "Pentesting Notes/1_Enumeration/FTP.md",
-    "Laboratorios/DockerLabs/Facil/ApiBase.md",
     "Reverse Engineering/PicoCTF/Labs/EASY/Vault-door-training.md",
     "Pentesting Notes/File Tranfer/Netcat & Ncat.md",
     "Reverse Engineering/PicoCTF/Labs/EASY",
     "Reverse Engineering/PicoCTF/Labs",
     "Reverse Engineering/PicoCTF",
     "Reverse Engineering",
-    "Pentesting Notes/Web/Vulnerabilities/03-SSRF/Cheat Sheet.md",
     "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md",
     "Pentesting Notes/Web/Vulnerabilities/03-SSRF",
-    "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md",
     "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal",
-    "Pentesting Notes/Web/Vulnerabilities/Sin título.md",
-    "Pentesting Notes/1_Enumeration/Oracle TNS.md",
-    "Pentesting Notes/1_Enumeration/NFS.md",
-    "Pentesting Notes/1_Enumeration/MySQL.md",
-    "Pentesting Notes/1_Enumeration/MSSQL.md",
-    "Pentesting Notes/Web/Vulnerabilities",
-    "Pentesting Notes/Web/Fuzzing",
-    "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection",
-    "Pentesting Notes/OWSAP/Sin nombre"
+    "Pentesting Notes/Web/Vulnerabilities"
   ]
 }
