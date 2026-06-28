@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Laboratorios/DockerLabs/MuyFacil/Trust.md",
+                "file": "Laboratorios/DockerLabs/Facil/Gotham.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Trust"
+              "title": "Gotham"
             }
           }
         ]
@@ -195,25 +195,30 @@
   },
   "active": "c2e73ec7ae759669",
   "lastOpenFiles": [
-    "assets/Pasted image 20260624130345.png",
-    "assets/Pasted image 20260624130232.png",
-    "assets/Pasted image 20260624130050.png",
-    "assets/Pasted image 20260624130031.png",
-    "assets/Pasted image 20260624125858.png",
-    "assets/Pasted image 20260624125713.png",
-    "assets/Pasted image 20260624125557.png",
-    "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
+    "assets/Pasted image 20260624175904.png",
+    "assets/Pasted image 20260624175834.png",
+    "assets/Pasted image 20260624175751.png",
+    "Sin título.md",
+    "Laboratorios/DockerLabs/Facil/Gotham.md",
+    "assets/Pasted image 20260624175652.png",
+    "assets/Pasted image 20260624175607.png",
+    "assets/Pasted image 20260624175510.png",
+    "assets/Pasted image 20260624175448.png",
+    "assets/Pasted image 20260624175424.png",
+    "assets/Pasted image 20260624175241.png",
+    "assets/Pasted image 20260624175110.png",
+    "assets/Pasted image 20260624175005.png",
+    "Pentesting Notes/File Tranfer/General.md",
+    "Pentesting Notes/Web/Fuzzing/Gobuster.md",
     "Laboratorios/DockerLabs/MuyFacil/Trust.md",
+    "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
     "Pentesting Notes/1_Enumeration/SNMP.md",
     "Pentesting Notes/1_Enumeration/SMTP.md",
     "Pentesting Notes/1_Enumeration/SSH.md",
-    "Pentesting Notes/Web/Fuzzing/Gobuster.md",
     "Pentesting Notes/1_Enumeration/1. Service Scanning.md",
     "Laboratorios/DockerLabs/MuyFacil/Vacaciones.md",
     "Laboratorios/DockerLabs/MuyFacil/Tproot.md",
     "Laboratorios/DockerLabs/MuyFacil/Obsession.md",
-    "assets/Pasted image 20260618225158.png",
-    "assets/Pasted image 20260618225121.png",
     "Pentesting Notes/1_Enumeration/FTP.md",
     "Laboratorios/DockerLabs/Facil/ApiBase.md",
     "Reverse Engineering/PicoCTF/Labs/EASY/Vault-door-training.md",
@@ -222,7 +227,6 @@
     "Reverse Engineering/PicoCTF/Labs",
     "Reverse Engineering/PicoCTF",
     "Reverse Engineering",
-    "Pentesting Notes/File Tranfer/General.md",
     "Pentesting Notes/Web/Vulnerabilities/03-SSRF/Cheat Sheet.md",
     "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md",
     "Pentesting Notes/Web/Vulnerabilities/03-SSRF",
@@ -233,13 +237,9 @@
     "Pentesting Notes/1_Enumeration/NFS.md",
     "Pentesting Notes/1_Enumeration/MySQL.md",
     "Pentesting Notes/1_Enumeration/MSSQL.md",
-    "Pentesting Notes/1_Enumeration/IPMI.md",
-    "Pentesting Notes/1_Enumeration/IMAPvsPOP3.md",
     "Pentesting Notes/Web/Vulnerabilities",
     "Pentesting Notes/Web/Fuzzing",
     "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection",
-    "Pentesting Notes/OWSAP/Sin nombre",
-    "assets/Pasted image 20260222173217.png",
-    "assets/Pasted image 20260222173100.png"
+    "Pentesting Notes/OWSAP/Sin nombre"
   ]
 }
