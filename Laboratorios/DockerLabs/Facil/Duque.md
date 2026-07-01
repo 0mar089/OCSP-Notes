@@ -1,21 +1,37 @@
+## Fase de Reconocimiento y Descubrimiento (Enumeración)
 
-Hacemos el escaneo nmap y nos encontramos con el puerto 80 HTTP y el puerto 22 SSH abierto:
+### Escaneo de Puertos (Nmap)
+Realizamos el escaneo inicial con nmap e identificamos el puerto 80 HTTP y el puerto 22 SSH abierto:
 
 ![[Pasted image 20260629235752.png]]
 
-Hacemos un pequeño escaneo/enumeracion/analisis en la web:
+**Servicios identificados:**
+* **Puerto 22/TCP (SSH):** Puerto abierto para control remoto. Ver teoría en [[Pentesting Notes/1_Enumeration/SSH\|SSH.md]].
+* **Puerto 80/TCP (HTTP):** Servidor web expuesto. Ver teoría en [[Pentesting Notes/1_Enumeration/HTTP & HTTPS\|HTTP & HTTPS.md]].
+
+---
+
+## Enumeración Web
+
+### Análisis Web e Inicio de Sesión
+Procedemos a realizar el análisis del servidor web:
 
 ![[Pasted image 20260629235837.png]]
 
 ![[Pasted image 20260630000014.png]]
 
-Vemos que hay un apartado de bills, pero cuando entramos:
+Al navegar por la web, identificamos un apartado de facturas ("bills"). Al acceder, nos muestra un panel de inicio de sesión:
 
 ![[Pasted image 20260630000041.png]]
 
-Nos sale un pequeño panel de inciio de sesión, y se ve que es vulnerable a *SQL Injecton*
+El panel parece vulnerable a inyección SQL (SQLi).
 
-Pero claro, si hacemos una inyección normal entramos como user (mario):
+---
+
+## Fase de Explotación / Intrusión
+
+### Explotación de SQL Injection y Bypass de Login
+Al realizar una inyección SQL clásica para saltarse la autenticación, ingresamos inicialmente como el usuario de menor rango mario:
 
 ```sql
 admin' or 1=1 -- -
@@ -23,62 +39,69 @@ admin' or 1=1 -- -
 
 ![[Pasted image 20260630000141.png]]
 
-Hay que intentar poder entrar como administradores, asi que probamos varios payloads:
+Para acceder como administrador y ver más opciones, refinamos el payload. El objetivo es que la base de datos devuelva la fila de admin específicamente:
 
-```
+```sql
 admin' and 1=1-- -
 ```
 
-He pensado que seguramente, el codigo asigne un rol (tambien en la sesion PHP) dependiendo del usuario que eres. Entonces si yo pongo **admin' or 1=1-- -**, en la query, el resultado será el 1=1 y no el user de admin solo, entonces me devuelve todos los usuarios (ya que el 1=1 siempre es true).  SI pongo el *AND* entonces la condicion tiene que ser true tanto el del usuario admin como el 1=1. 
+Al utilizar este payload, logramos acceder al panel administrativo:
 
-Por lo tanto me pillará el user admin. 
-
-Entonces me aparece otro panel:
 ![[Pasted image 20260630000956.png]]
 
-Aqui hay un posible IDOR, ya que la barra de busqueda añade a la url un id tal que asó:
+Ver guía teórica sobre inyecciones SQL en [[Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet\|SQL Injection Cheat Sheet]].
 
-```
+### Explotación de IDOR / Enumeración de Facturas
+El panel administrativo expone una búsqueda que añade un parámetro ID a la URL:
+
+```text
 http://172.17.0.2/bills/panel.php?id=fd
 ```
 
-Lo que pasa es que las facturas parecen tener un patron de tres letras y tres numeros:
-
-```
-id=xya456
-```
+Las facturas válidas parecen seguir una nomenclatura específica de tres letras seguidas de tres números (ej. xya456):
 
 ![[Pasted image 20260630001110.png]]
 
-Asi que con un comando, haremos una wordlist en busca de otras facturas a ver si podemos encontrar información:
+Para enumerar todas las facturas en busca de datos sensibles, generamos una wordlist personalizada con crunch utilizando un patrón específico (dos letras fijas "xy", seguidas de un carácter alfabético comodín y tres caracteres numéricos comodines):
 
 ```bash
 crunch 6 6 -t xy@%%% -o diccionario_corto.txt
 ```
 
-Esto genera un diccionario llamado **diccionario_corto.txt** que tiene 6 caracteres minimos y 6 maximo, asi que solo de 6 caracteres. Y con una plantilla de tipo, los 2 primeros caracteres serán xy, el proximo será una letra minuscula de la a-z (comodín @) y comodines de numeros (del 0 al 9) con el simbolo %. 
+Utilizamos este diccionario en la búsqueda de IDs válidos:
 
-Entonces el ataque quedaria tal que así:
 ![[Pasted image 20260630001642.png]]
 
-Y se ve que el id=xyc724 cambia de entre todos. Y si, se ven credenciales de usuario en esa pagina:
+* **Hallazgo:** Identificamos la factura con el ID xyc724. Al acceder a ella, se muestran credenciales de usuario del sistema en texto claro:
 
 ![[Pasted image 20260630001725.png]]
 
-Probamos a hacer ssh, y efectivamente nos deja:
+* **Acceso:** Probamos las credenciales obtenidas contra el servicio SSH y logramos ingresar con éxito:
+
 ![[Pasted image 20260630001811.png]]
 
-Ahora probamos a escalar privilegios:
+---
 
-Vemos que viendo los permisos SUID, podemos encontrar una vulnerabilidad con el archivo *env*:
+## Escalada de Privilegios
+
+### Enumeración Interna y SUID
+Listamos los binarios del sistema que tienen configurados permisos SUID de ejecución:
+
 ![[Pasted image 20260630193443.png]]
 
-Asi que podmeos ejecutar un comando para escalar privilegios de *duque* a *root*:
+* **Vulnerabilidad de Configuración:** El comando env (/usr/bin/env) tiene el bit SUID activo. Ver teoría en [[Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions\|Permissions.md]].
+
+### Explotación de SUID (env)
+Aprovechamos el bit SUID del binario env para forzar la ejecución de una shell bash con privilegios elevados:
 
 ```bash
 /usr/bin/env /bin/bash -p
 ```
 
+¡Obtenemos acceso como el usuario root!
 
+---
 
-
+## Relaciones y Conceptos
+* **Teoría:** [[Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet\|SQL Injection Cheat Sheet]], [[Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions\|Linux Privilege Escalation - Permissions.md]], [[Pentesting Notes/1_Enumeration/SSH\|SSH.md]]
+* **Laboratorios Relacionados:** [[Laboratorios/DockerLabs/Facil/ApiBase\|ApiBase]] (Comparte uso de SQLi), [[Laboratorios/DockerLabs/Facil/Elevator\|Elevator]] (Comparte escalada por env)

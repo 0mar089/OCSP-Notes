@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Laboratorios/DockerLabs/Facil/Patriaquerida.md",
+                "file": "Laboratorios/DockerLabs/Indice.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Patriaquerida"
+              "title": "Indice"
             }
           }
         ],
@@ -224,9 +224,19 @@
   },
   "active": "7239d670af2abab4",
   "lastOpenFiles": [
+    "Laboratorios/DockerLabs/Facil/ApiBase.md",
+    "Laboratorios/DockerLabs/Indice.md",
+    "Laboratorios/DockerLabs/MuyFacil/Vacaciones.md",
+    "Laboratorios/DockerLabs/MuyFacil/Trust.md",
+    "Laboratorios/DockerLabs/MuyFacil/Tproot.md",
+    "Laboratorios/DockerLabs/MuyFacil/Obsession.md",
+    "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
+    "Laboratorios/DockerLabs/Facil/Patriaquerida.md",
+    "Laboratorios/DockerLabs/Facil/Gotham.md",
+    "Laboratorios/DockerLabs/Facil/Elevator.md",
+    "Laboratorios/DockerLabs/Facil/Duque.md",
     "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md",
     "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Enumeration.md",
-    "Laboratorios/DockerLabs/Facil/Patriaquerida.md",
     "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Environment.md",
     "assets/Pasted image 20260630235625.png",
     "assets/Pasted image 20260630235418.png",
@@ -241,10 +251,6 @@
     "assets/Pasted image 20260630232934.png",
     "assets/Pasted image 20260630232308.png",
     "Pentesting Notes/1_Enumeration/1. Service Scanning.md",
-    "Laboratorios/DockerLabs/Facil/Duque.md",
-    "Laboratorios/DockerLabs/Facil/Elevator.md",
-    "Laboratorios/DockerLabs/Facil/Gotham.md",
-    "Laboratorios/DockerLabs/Facil/ApiBase.md",
     "Pentesting Notes/1_Enumeration/RDP&WinRM&WMI.md",
     "Pentesting Notes/1_Enumeration/SMTP.md",
     "Pentesting Notes/1_Enumeration/Oracle TNS.md",
@@ -255,13 +261,8 @@
     "Pentesting Notes/2_Explotation",
     "Pentesting Notes/3_Post-Explotation",
     "Pentesting Notes/File Tranfer/General.md",
-    "Laboratorios/DockerLabs/MuyFacil/Trust.md",
-    "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
     "Pentesting Notes/1_Enumeration/SNMP.md",
     "Pentesting Notes/1_Enumeration/SSH.md",
-    "Laboratorios/DockerLabs/MuyFacil/Vacaciones.md",
-    "Laboratorios/DockerLabs/MuyFacil/Tproot.md",
-    "Laboratorios/DockerLabs/MuyFacil/Obsession.md",
     "Reverse Engineering/PicoCTF/Labs/EASY",
     "Reverse Engineering/PicoCTF/Labs",
     "Reverse Engineering/PicoCTF",
