@@ -8,35 +8,26 @@
         "type": "tabs",
         "children": [
           {
-            "id": "c2e73ec7ae759669",
+            "id": "426feb92ee21e1f9",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Pentesting Notes/Web/Fuzzing/FFUF.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "FFUF"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Vista gráfica"
             }
           },
           {
-            "id": "7239d670af2abab4",
+            "id": "c2e73ec7ae759669",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Laboratorios/DockerLabs/Facil/Showtime.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Showtime"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Vista gráfica"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -76,7 +67,7 @@
                 "sortOrder": "alphabetical"
               },
               "icon": "lucide-search",
-              "title": "Search"
+              "title": "Buscar"
             }
           },
           {
@@ -208,53 +199,53 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "7239d670af2abab4",
+  "active": "426feb92ee21e1f9",
   "lastOpenFiles": [
-    "assets/Pasted image 20260702003400.png",
-    "assets/Pasted image 20260702003252.png",
-    "assets/Pasted image 20260702003123.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222173217.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222173100.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222172119.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222171157.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222171122.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222170708.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222170639.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222170549.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222170501.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260222170431.png",
+    "Laboratorios/DockerLabs-GitBook/assets/Pasted image 20260630235625.png",
+    "Laboratorios/DockerLabs-GitBook/Facil/WalkingDead.md",
+    "Laboratorios/DockerLabs-GitBook/Facil/Showtime.md",
+    "Laboratorios/DockerLabs-GitBook/Facil/Patriaquerida.md",
+    "Laboratorios/DockerLabs-GitBook/Facil/Gotham.md",
+    "Laboratorios/DockerLabs-GitBook/Facil/Elevator.md",
+    "Laboratorios/DockerLabs-GitBook/Facil/Duque.md",
+    "Laboratorios/DockerLabs-GitBook/Facil/ApiBase.md",
+    "Laboratorios/DockerLabs-GitBook/Facil/Aguademayo.md",
+    "Laboratorios/DockerLabs-GitBook/Facil",
+    "Laboratorios/DockerLabs-GitBook/MuyFacil/Obsession.md",
+    "Laboratorios/DockerLabs-GitBook/MuyFacil/Tproot.md",
+    "Laboratorios/DockerLabs-GitBook/MuyFacil/Hedgehog.md",
+    "Laboratorios/DockerLabs-GitBook/MuyFacil/Vacaciones.md",
+    "Laboratorios/DockerLabs-GitBook/MuyFacil/Trust.md",
+    "Laboratorios/DockerLabs-GitBook/MuyFacil",
+    "Laboratorios/DockerLabs-GitBook/Indice.md",
+    "Laboratorios/DockerLabs-GitBook/assets",
+    "Laboratorios/DockerLabs-GitBook",
+    "Laboratorios/DockerLabs/Facil/Aguademayo.md",
     "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Enumeration.md",
+    "Laboratorios/DockerLabs/Facil/WalkingDead.md",
+    "Pentesting Notes/Web/Fuzzing/FFUF.md",
+    "Sin título.base",
+    "Laboratorios/DockerLabs/Facil/Elevator.md",
+    "Laboratorios/DockerLabs/Indice.md",
     "Laboratorios/DockerLabs/Facil/Showtime.md",
     "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md",
-    "assets/Pasted image 20260701233119.png",
-    "assets/Pasted image 20260701232613.png",
-    "assets/Pasted image 20260701232410.png",
     "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md",
-    "Pentesting Notes/Web/Fuzzing/FFUF.md",
-    "assets/Pasted image 20260701222255.png",
-    "assets/Pasted image 20260701222250.png",
-    "assets/Pasted image 20260701222042.png",
-    "assets/Pasted image 20260701221956.png",
-    "assets/Pasted image 20260701221856.png",
     "Laboratorios/DockerLabs/Facil/Patriaquerida.md",
-    "Laboratorios/DockerLabs/Facil/Aguademayo.md",
-    "Laboratorios/DockerLabs/Indice.md",
     "Pentesting Notes/1_Enumeration/1. Service Scanning.md",
-    "Laboratorios/DockerLabs/Facil/ApiBase.md",
-    "Pentesting Notes/1_Enumeration/HTTP & HTTPS.md",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Services.md",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Kernel & CVE.md",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Checklist.md",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Linux Internals.md",
-    "Laboratorios/DockerLabs/MuyFacil/Vacaciones.md",
-    "Laboratorios/DockerLabs/MuyFacil/Trust.md",
-    "Laboratorios/DockerLabs/MuyFacil/Tproot.md",
-    "Laboratorios/DockerLabs/MuyFacil/Obsession.md",
-    "Laboratorios/DockerLabs/MuyFacil/Hedgehog.md",
-    "Laboratorios/DockerLabs/Facil/Gotham.md",
-    "Laboratorios/DockerLabs/Facil/Elevator.md",
-    "Laboratorios/DockerLabs/Facil/Duque.md",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Environment.md",
-    "Sin título.md",
     "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation",
     "Pentesting Notes/2_Explotation",
     "Pentesting Notes/3_Post-Explotation",
     "Reverse Engineering/PicoCTF/Labs/EASY",
-    "Reverse Engineering/PicoCTF/Labs",
-    "Reverse Engineering/PicoCTF",
-    "Reverse Engineering",
-    "Pentesting Notes/Web/Vulnerabilities/03-SSRF",
-    "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal",
-    "Pentesting Notes/Web/Vulnerabilities"
+    "Reverse Engineering/PicoCTF/Labs"
   ]
 }
