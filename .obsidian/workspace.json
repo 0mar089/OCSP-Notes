@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Laboratorios/DockerLabs/Facil/Internship.md",
+                "file": "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Kernel & CVE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Internship"
+              "title": "Kernel & CVE"
             }
           },
           {
@@ -67,7 +67,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tty",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -209,22 +209,22 @@
   },
   "active": "426feb92ee21e1f9",
   "lastOpenFiles": [
-    "Pentesting Notes/1_Enumeration/SSH.md",
+    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Services.md",
+    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md",
+    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Kernel & CVE.md",
+    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Enumeration.md",
+    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Environment.md",
     "Laboratorios/DockerLabs/Facil/Internship.md",
+    "Pentesting Notes/1_Enumeration/SSH.md",
     "assets/Pasted image 20260711112711.png",
     "assets/Pasted image 20260711112410.png",
     "assets/Pasted image 20260711112229.png",
     "assets/Pasted image 20260711111847.png",
     "Laboratorios/DockerLabs/Facil/WalkingDead.md",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md",
     "Laboratorios/DockerLabs/Facil/Showtime.md",
     "Laboratorios/DockerLabs/Indice.md",
     "assets/Pasted image 20260710183501.png",
     "assets/Pasted image 20260710183416.png",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Services.md",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Environment.md",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Kernel & CVE.md",
-    "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Enumeration.md",
     "assets/Pasted image 20260710181755.png",
     "assets/Pasted image 20260707231825.png",
     "assets/Pasted image 20260707231811.png",
