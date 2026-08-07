@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Laboratorios/DockerLabs/Facil/Internal.md",
+                "file": "Laboratorios/Vulnyx/Swamp.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Internal"
+              "title": "Swamp"
             }
           }
         ]
@@ -197,22 +197,26 @@
   },
   "active": "f967de77273838a0",
   "lastOpenFiles": [
+    "Laboratorios/Vulnyx/Indice.md",
+    "assets/Pasted image 20260808010345.png",
+    "assets/Pasted image 20260808010308.png",
+    "assets/Pasted image 20260808010159.png",
+    "assets/Pasted image 20260808010028.png",
+    "assets/Pasted image 20260808005938.png",
+    "assets/Pasted image 20260807184634.png",
+    "assets/Pasted image 20260807184604.png",
+    "assets/Pasted image 20260807184454.png",
+    "assets/Pasted image 20260805225355.png",
+    "assets/Pasted image 20260805225020.png",
+    "Laboratorios/DockerLabs/Facil/Autoescuela.md",
+    "Laboratorios/Vulnyx/Swamp.md",
+    "Laboratorios/Vulnyx",
+    "Laboratorios/DockerLabs/Facil/Internal.md",
     "Laboratorios/DockerLabs/MuyFacil/Vacaciones.md",
     "Laboratorios/DockerLabs/Indice.md",
     "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md",
     "Laboratorios/DockerLabs/Facil/WalkingDead.md",
     "Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md",
-    "Laboratorios/DockerLabs/Facil/Internal.md",
-    "assets/Pasted image 20260805011157.png",
-    "assets/Pasted image 20260805011150.png",
-    "assets/Pasted image 20260805011027.png",
-    "assets/Pasted image 20260805010926.png",
-    "assets/Pasted image 20260805010855.png",
-    "assets/Pasted image 20260805010809.png",
-    "assets/Pasted image 20260805004919.png",
-    "assets/Pasted image 20260805004853.png",
-    "assets/Pasted image 20260805004426.png",
-    "assets/Pasted image 20260805001914.png",
     "Laboratorios/DockerLabs/Facil/Internship.md",
     "Laboratorios/DockerLabs/Facil/Showtime.md",
     "Laboratorios/DockerLabs/Facil/Patriaquerida.md",
@@ -230,9 +234,6 @@
     "Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md",
     "WindowsCMD.md",
     "ShortCuts Kali.md",
-    "Comandos Windows CMD.md",
-    "Pentesting Notes/File Tranfer/Windows.md",
-    "Pentesting Notes/File Tranfer/Netcat & Ncat.md",
     "Laboratorios/DockerLabs-GitBook/Facil",
     "Laboratorios/DockerLabs-GitBook/MuyFacil",
     "Laboratorios/DockerLabs-GitBook/assets",
@@ -241,7 +242,6 @@
     "Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation",
     "Pentesting Notes/2_Explotation",
     "Pentesting Notes/3_Post-Explotation",
-    "Reverse Engineering/PicoCTF/Labs/EASY",
-    "Reverse Engineering/PicoCTF/Labs"
+    "Reverse Engineering/PicoCTF/Labs/EASY"
   ]
 }
