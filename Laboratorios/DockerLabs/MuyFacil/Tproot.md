@@ -1,39 +1,45 @@
-## Fase de Reconocimiento y Descubrimiento (Enumeración)
+# Tproot
 
-### Escaneo de Puertos (Nmap)
+### Fase de Reconocimiento y Descubrimiento (Enumeración)
+
+#### Escaneo de Puertos (Nmap)
+
 Realizamos un escaneo inicial de puertos en la máquina objetivo para identificar servicios activos:
 
-![Pasted image 20260618225121.png](../../../assets/Pasted%20image%2020260618225121.png)
+![Pasted image 20260618225121.png](<../../../.gitbook/assets/Pasted image 20260618225121.png>)
 
 **Servicios identificados:**
-* **Puerto 21/TCP (FTP):** Servicio de transferencia de archivos activo. Ver teoría en [FTP.md](../../../Pentesting%20Notes/1_Enumeration/FTP.md).
-* **Puerto 80/TCP (HTTP):** Servidor web activo. Ver teoría en [HTTP & HTTPS.md](../../../Pentesting%20Notes/1_Enumeration/HTTP%20%26%20HTTPS.md).
 
----
+* **Puerto 21/TCP (FTP):** Servicio de transferencia de archivos activo. Ver teoría en [FTP.md](<../../../Pentesting Notes/1_Enumeration/FTP.md>).
+* **Puerto 80/TCP (HTTP):** Servidor web activo. Ver teoría en [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>).
 
-## Enumeración de Servicios y Vulnerabilidades
+***
 
-### Análisis del Servicio FTP
+### Enumeración de Servicios y Vulnerabilidades
+
+#### Análisis del Servicio FTP
+
 Inspeccionamos la versión del servicio FTP que está corriendo en el servidor. Al ser una versión antigua, procedemos a verificar si cuenta con vulnerabilidades públicas explotables:
 
-![Pasted image 20260618225158.png](../../../assets/Pasted%20image%2020260618225158.png)
+![Pasted image 20260618225158.png](<../../../.gitbook/assets/Pasted image 20260618225158.png>)
 
-* **Resultado:** [Explicar aquí el exploit o vulnerabilidad identificada para la versión de FTP y cómo se procedió a explotarlo].
+* **Resultado:** \[Explicar aquí el exploit o vulnerabilidad identificada para la versión de FTP y cómo se procedió a explotarlo].
 
----
+***
 
-## Fase de Explotación / Intrusión
+### Fase de Explotación / Intrusión
 
-* [Documentar el método de ejecución del exploit, las opciones configuradas y cómo se obtuvo el acceso inicial a la máquina].
+* \[Documentar el método de ejecución del exploit, las opciones configuradas y cómo se obtuvo el acceso inicial a la máquina].
 
----
+***
 
-## Escalada de Privilegios
+### Escalada de Privilegios
 
-* [Documentar los comandos de enumeración ejecutados en el sistema víctima y los pasos realizados para obtener privilegios de root].
+* \[Documentar los comandos de enumeración ejecutados en el sistema víctima y los pasos realizados para obtener privilegios de root].
 
----
+***
 
-## Relaciones y Conceptos
-* **Teoría:** [FTP.md](../../../Pentesting%20Notes/1_Enumeration/FTP.md), [HTTP & HTTPS.md](../../../Pentesting%20Notes/1_Enumeration/HTTP%20%26%20HTTPS.md)
-* **Laboratorios Relacionados:** [ApiBase](../../../Laboratorios/DockerLabs/Facil/ApiBase.md) (Comparte análisis relacionado con servicios FTP)
+### Relaciones y Conceptos
+
+* **Teoría:** [FTP.md](<../../../Pentesting Notes/1_Enumeration/FTP.md>), [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>)
+* **Laboratorios Relacionados:** [ApiBase](../Facil/ApiBase.md) (Comparte análisis relacionado con servicios FTP)
