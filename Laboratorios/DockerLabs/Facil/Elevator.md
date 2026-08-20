@@ -3,10 +3,10 @@
 ### Escaneo de Puertos (Nmap)
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios abiertos:
 
-![[Pasted image 20260629001537.png]]
+![Pasted image 20260629001537.png](../../../assets/Pasted%20image%2020260629001537.png)
 
 **Servicios identificados:**
-* **Puerto 80/TCP (HTTP):** Servidor web expuesto (único puerto abierto). Ver teoría en [[Pentesting Notes/1_Enumeration/HTTP & HTTPS\|HTTP & HTTPS.md]].
+* **Puerto 80/TCP (HTTP):** Servidor web expuesto (único puerto abierto). Ver teoría en [HTTP & HTTPS.md](../../../Pentesting%20Notes/1_Enumeration/HTTP%20%26%20HTTPS.md).
 
 ---
 
@@ -15,11 +15,11 @@ Realizamos un escaneo de puertos inicial con nmap para identificar los servicios
 ### Inspección e Identificación de Directorios (WhatWeb / Gobuster)
 Realizamos un reconocimiento de tecnologías mediante whatweb y fuzzing de directorios con gobuster:
 
-![[Pasted image 20260629001700.png]]
+![Pasted image 20260629001700.png](../../../assets/Pasted%20image%2020260629001700.png)
 
 * **Hallazgo:** Identificamos un directorio `/themes`. Tras realizar una búsqueda recursiva sobre esta ruta para encontrar recursos o páginas de interés:
 
-![[Pasted image 20260629002013.png]]
+![Pasted image 20260629002013.png](../../../assets/Pasted%20image%2020260629002013.png)
 
 * **Hallazgo Clave:** Detectamos un archivo PHP en el servidor que sugiere una funcionalidad de subida de archivos (upload).
 
@@ -30,15 +30,15 @@ Realizamos un reconocimiento de tecnologías mediante whatweb y fuzzing de direc
 ### Subida de Archivos y Ejecución Remota de Comandos (RCE)
 Debido a que no contamos con una interfaz gráfica web directa para la subida de archivos, procedemos a realizar la solicitud de subida a través de la terminal:
 
-![[Pasted image 20260629002120.png]]
+![Pasted image 20260629002120.png](../../../assets/Pasted%20image%2020260629002120.png)
 
-La validación del lado del servidor restringe la subida únicamente a extensiones de imagen JPG. Para evadir esta restricción y ejecutar código malicioso, subimos un script de PHP pero utilizando una doble extensión o renombrado (ej. archivo PHP con extensión final .jpg). Ver teoría sobre evasión de filtros de subida en [[Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet\|Path Traversal Cheat Sheet]].
+La validación del lado del servidor restringe la subida únicamente a extensiones de imagen JPG. Para evadir esta restricción y ejecutar código malicioso, subimos un script de PHP pero utilizando una doble extensión o renombrado (ej. archivo PHP con extensión final .jpg). Ver teoría sobre evasión de filtros de subida en [Path Traversal Cheat Sheet](../../../Pentesting%20Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat%20Sheet.md).
 
-![[Pasted image 20260629002211.png]]
+![Pasted image 20260629002211.png](../../../assets/Pasted%20image%2020260629002211.png)
 
 El archivo se carga con éxito en la ruta `/themes/uploads/`. Procedemos a interactuar con él pasándole comandos en el parámetro configurado:
 
-![[Pasted image 20260629002235.png]]
+![Pasted image 20260629002235.png](../../../assets/Pasted%20image%2020260629002235.png)
 
 ### Obtención de una Shell Inversa (Reverse Shell)
 Confirmada la ejecución remota de comandos (RCE), nos ponemos en escucha en nuestra máquina atacante por el puerto 4242 y forzamos una conexión de retorno:
@@ -58,9 +58,9 @@ La escalada de privilegios se compone de un encadenamiento de pivotajes entre di
 ### 1. Pivotaje de `www-data` a `daphne` (env)
 Enumeramos los privilegios de sudo para el usuario actual:
 
-![[Pasted image 20260629003156.png]]
+![Pasted image 20260629003156.png](../../../assets/Pasted%20image%2020260629003156.png)
 
-* **Vector:** El usuario `www-data` puede ejecutar el binario `/usr/bin/env` como el usuario `daphne` sin proporcionar contraseña. Ver teoría en [[Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions\|Permissions.md]].
+* **Vector:** El usuario `www-data` puede ejecutar el binario `/usr/bin/env` como el usuario `daphne` sin proporcionar contraseña. Ver teoría en [Permissions.md](../../../Pentesting%20Notes/3_Post-Explotation/Linux%20Privilage%20Escalation/Permissions.md).
 * **Explotación:**
   ```bash
   sudo -u daphne /usr/bin/env /bin/bash
@@ -69,7 +69,7 @@ Enumeramos los privilegios de sudo para el usuario actual:
 ### 2. Pivotaje de `daphne` a `vilma` (ash)
 Enumeramos los permisos de sudo de `daphne`:
 
-![[Pasted image 20260629003305.png]]
+![Pasted image 20260629003305.png](../../../assets/Pasted%20image%2020260629003305.png)
 
 * **Vector:** El usuario `daphne` puede ejecutar la shell `ash` como `vilma` sin ingresar contraseña.
 * **Explotación:**
@@ -80,7 +80,7 @@ Enumeramos los permisos de sudo de `daphne`:
 ### 3. Pivotaje de `vilma` a `shaggy` (ruby)
 Enumeramos los permisos de sudo de `vilma`:
 
-![[Pasted image 20260629003522.png]]
+![Pasted image 20260629003522.png](../../../assets/Pasted%20image%2020260629003522.png)
 
 * **Vector:** El usuario `vilma` puede ejecutar el intérprete `/usr/bin/ruby` como `shaggy` sin contraseña.
 * **Explotación:**
@@ -91,7 +91,7 @@ Enumeramos los permisos de sudo de `vilma`:
 ### 4. Pivotaje de `shaggy` a `fred` (lua)
 Enumeramos los permisos de sudo de `shaggy`:
 
-![[Pasted image 20260629003728.png]]
+![Pasted image 20260629003728.png](../../../assets/Pasted%20image%2020260629003728.png)
 
 * **Vector:** El usuario `shaggy` puede ejecutar `/usr/bin/lua` como `fred` sin contraseña.
 * **Explotación:**
@@ -102,7 +102,7 @@ Enumeramos los permisos de sudo de `shaggy`:
 ### 5. Pivotaje de `fred` a `scooby` (gcc)
 Enumeramos los permisos de sudo de `fred`:
 
-![[Pasted image 20260629004141.png]]
+![Pasted image 20260629004141.png](../../../assets/Pasted%20image%2020260629004141.png)
 
 * **Vector:** El usuario `fred` puede ejecutar el compilador `/usr/bin/gcc` como `scooby` sin contraseña.
 * **Explotación:**
@@ -113,7 +113,7 @@ Enumeramos los permisos de sudo de `fred`:
 ### 6. Escalada Final a `root` (sudo)
 Enumeramos los permisos de sudo de `scooby`:
 
-![[Pasted image 20260629004257.png]]
+![Pasted image 20260629004257.png](../../../assets/Pasted%20image%2020260629004257.png)
 
 * **Vector:** El usuario `scooby` puede ejecutar el binario `/usr/bin/sudo` como `root` sin contraseña.
 * **Explotación:**
@@ -126,5 +126,5 @@ Enumeramos los permisos de sudo de `scooby`:
 ---
 
 ## Relaciones y Conceptos
-* **Teoría:** [[Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions\|Linux Privilege Escalation - Permissions.md]], [[Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet\|Path Traversal Cheat Sheet]], [[Pentesting Notes/1_Enumeration/HTTP & HTTPS\|HTTP & HTTPS.md]]
-* **Laboratorios Relacionados:** [[Laboratorios/DockerLabs/Facil/Duque\|Duque]] (Comparte escalada por env), [[Laboratorios/DockerLabs/MuyFacil/Vacaciones\|Vacaciones]] (Comparte pivotaje por ruby)
+* **Teoría:** [Linux Privilege Escalation - Permissions.md](../../../Pentesting%20Notes/3_Post-Explotation/Linux%20Privilage%20Escalation/Permissions.md), [Path Traversal Cheat Sheet](../../../Pentesting%20Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat%20Sheet.md), [HTTP & HTTPS.md](../../../Pentesting%20Notes/1_Enumeration/HTTP%20%26%20HTTPS.md)
+* **Laboratorios Relacionados:** [Duque](../../../Laboratorios/DockerLabs/Facil/Duque.md) (Comparte escalada por env), [Vacaciones](../../../Laboratorios/DockerLabs/MuyFacil/Vacaciones.md) (Comparte pivotaje por ruby)
