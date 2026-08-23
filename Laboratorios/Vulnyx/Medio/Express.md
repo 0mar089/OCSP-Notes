@@ -178,4 +178,4 @@ Ejecutamos la lectura del archivo de la flag ubicado en `/root/root.txt`:
 ### Relaciones y Conceptos
 
 * **Teoría:** [SSRF Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/03-SSRF/Cheat Sheet.md>), [FFUF.md](<../../../Pentesting Notes/Web/Fuzzing/Cheat Sheet.md>), [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>), [SSH.md](<../../../Pentesting Notes/1_Enumeration/SSH.md>), [Linux Privilege Escalation - Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>)
-* **Laboratorios Relacionados:** [Swamp](../Facil/Swamp.md) (Comparte resolución por VHosts y análisis de archivos JavaScript), [Gotham](../../DockerLabs/Facil/Gotham.md) (Comparte interacción con paneles y explotación de endpoints vulnerables)
+* **Laboratorios Relacionados:** [Swamp](../Facil/Swamp.md) (Comparte resolución por VHosts y análisis de archivos JavaScript), [JarJar](JarJar.md) (Comparte resolución por VHosts y entorno Vulnyx), [Gotham](../../DockerLabs/Facil/Gotham.md) (Comparte interacción con paneles y explotación de endpoints vulnerables)

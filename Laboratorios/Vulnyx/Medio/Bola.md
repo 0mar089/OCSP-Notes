@@ -305,4 +305,4 @@ Payload final enviado:
 ### Relaciones y Conceptos
 
 * **Teoría:** [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>), [SSH.md](<../../../Pentesting Notes/1_Enumeration/SSH.md>), [Fuzzing Cheat Sheet](<../../../Pentesting Notes/Web/Fuzzing/Cheat Sheet.md>), [Linux Privilege Escalation - Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>)
-* **Laboratorios Relacionados:** [Express](Express.md) (Comparte resolución por VHosts, descubrimiento de servicios internos en puerto 9000 y escalada a root), [Internal](../../DockerLabs/Facil/Internal.md) (Comparte port forwarding y explotación de servicios locales)
+* **Laboratorios Relacionados:** [Express](Express.md) (Comparte resolución por VHosts, descubrimiento de servicios internos en puerto 9000 y escalada a root), [JarJar](JarJar.md) (Comparte resolución por VHosts, paneles web y acceso SSH), [Internal](../../DockerLabs/Facil/Internal.md) (Comparte port forwarding y explotación de servicios locales)

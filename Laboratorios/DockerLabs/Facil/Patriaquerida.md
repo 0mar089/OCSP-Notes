@@ -103,4 +103,4 @@ Consultando las técnicas de elevación de privilegios en GTFOBins, ejecutamos e
 ### Relaciones y Conceptos
 
 * **Teoría:** [Path Traversal Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md>), [Linux Privilege Escalation - Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>), [SSH.md](<../../../Pentesting Notes/1_Enumeration/SSH.md>)
-* **Laboratorios Relacionados:** \[Ninguno con técnicas similares documentadas actualmente]
+* **Laboratorios Relacionados:** [JarJar](<../../../Laboratorios/Vulnyx/Medio/JarJar.md>) (Comparte explotación de Path Traversal / LFI y escalada de privilegios mediante binarios SUID)

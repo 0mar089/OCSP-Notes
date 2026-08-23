@@ -33,6 +33,7 @@
     * [Medio](laboratorios/vulnyx/medio/README.md)
       * [Bola](Laboratorios/Vulnyx/Medio/Bola.md)
       * [Express](Laboratorios/Vulnyx/Medio/Express.md)
+      * [JarJar](Laboratorios/Vulnyx/Medio/JarJar.md)
 * [Pentesting Notes](pentesting-notes/README.md)
   * [1\_Enumeration](pentesting-notes/1_enumeration/README.md)
     * [1. Service Scanning](<Pentesting Notes/1_Enumeration/1. Service Scanning.md>)
