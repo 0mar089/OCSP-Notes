@@ -317,3 +317,5 @@ Nos conectamos por FTP:
 ![[Pasted image 20260824224532.png]]
 
 
+Y ahi esta la flag:
+
