@@ -314,4 +314,6 @@ i.cassini:1r3n3!$%
 
 Nos conectamos por FTP:
 
+![[Pasted image 20260824224532.png]]
+
 
