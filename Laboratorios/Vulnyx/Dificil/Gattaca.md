@@ -319,3 +319,9 @@ Nos conectamos por FTP:
 
 Y ahi esta la flag:
 
+```
+www-data@gattaca:/tmp/chisel$ cat user.txt 
+d3eca2e0a0755197605edc2eaa6be710
+```
+
+Ahora hay que escalar 
