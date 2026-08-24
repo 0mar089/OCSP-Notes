@@ -324,4 +324,6 @@ www-data@gattaca:/tmp/chisel$ cat user.txt
 d3eca2e0a0755197605edc2eaa6be710
 ```
 
-Ahora hay que escalar 
+Ahora hay que escalar, ya estamos en el usuario i.cassini tambien:
+
+![[Pasted image 20260824231015.png]]
