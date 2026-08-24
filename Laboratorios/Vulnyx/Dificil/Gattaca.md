@@ -266,7 +266,11 @@ Y ahora intentamos hydra con el comando:
 hydra -l i.cassini -P irene_wordlist.txt ftp://127.0.0.1 -s 2121 -t 4 -f -vV
 ```
 
+Esta wordlist no ha funcionado, asi que utilizaremos otra herramienta paracrear la wordlist, esta es llamada **cupp**:
 
+```
+git clone https://github.com/Mebus/cupp.git
+```
 
 
 
