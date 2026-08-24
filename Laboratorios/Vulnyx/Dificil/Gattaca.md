@@ -272,5 +272,13 @@ Esta wordlist no ha funcionado, asi que utilizaremos otra herramienta paracrear 
 git clone https://github.com/Mebus/cupp.git
 ```
 
+asi que nos ponemos en modo interactivo:
+
+```
+python3 cupp.py -i
+```
+
+
+
 
 
