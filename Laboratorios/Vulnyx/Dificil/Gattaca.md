@@ -232,5 +232,25 @@ El problema esque solo esta abierto desde dentro, no podemos acceder desde fuera
 
 Chisel permite crear un tunnel TCP/UDP y llevarlo sobre HTTP. Asi que usaremos eso para hacer una especia de port forwarding para aceder a ftp. 
 
+Descargamos el chisel:
+
+```
+wget https://github.com/jpillora/chisel/releases/download/v1.9.1/chisel_1.9.1_linux_amd64.gz
+```
+
+Y lo descomprimimos, le damos permisos y lo subimos a la maquina victima habiendo tenido antes un servidor en python:
+
+![[Pasted image 20260824204046.png]]
+
+UNa vez esto inicamos el servidor (que estara en nuestra maquina):
+
+```
+./chisel_1.9.1_linux_amd64 server -p 6000 --reverse
+```
+
+![[Pasted image 20260824204110.png]]
+
+
+
 
 
