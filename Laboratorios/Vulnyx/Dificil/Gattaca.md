@@ -173,3 +173,50 @@ Don't waste time with v.freeman and rockyou.txt
 Asi que sabemos que el usuario v.freeman no es el que queremos sino el i.cassini y la wordlist rockyou no funcionará. Asi que hay que hacer OSINT y crear una worfdlist especial para este usuario. 
 
 
+Creamos una wordlist base con le nombre y permutaciones:
+
+```
+cat > irene_base.txt << 'EOF'
+irene
+cassini
+irenecassini
+cassiniirene
+i
+cassini
+i.cassini
+irene.cassini
+icassini
+cassini.i
+cassiniirene
+irenec
+ireneca
+cassiniirene
+EOF
+```
+
+Ahora creamos las reglas:
+
+```bash
+cat > irene_rules.rule << 'EOF'
+
+:
+c
+u
+l
+
+so0
+sa@
+se3
+si1
+ss$
+..SNIP..
+```
+
+Y por ultimo ocn hashcat creamos la wordlist:
+
+```bash
+hashcat --force irene_base.txt -r irene_rules.rule --stdout | sort -u > irene_wordlist.txt
+```
+
+Y procedemos a hacer un ataque a ssh con el usuario i.cassini que se encuentra en el /etc/passwd:
+
