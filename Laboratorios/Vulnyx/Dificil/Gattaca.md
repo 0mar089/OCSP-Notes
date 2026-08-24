@@ -278,7 +278,40 @@ asi que nos ponemos en modo interactivo:
 python3 cupp.py -i
 ```
 
+Y contestamos a las preguntas:
+
+```
+First Name: Irene
+Surname: Cassini
+Nickname: (vacío)
+Birthdate (DDMMYYYY): (vacío)
+
+Partner's name: Vincent
+Partner's nickname: Freeman
+Partner's birthdate (DDMMYYYY): (vacío)
+
+Child's name: (vacío)
+Child's nickname: (vacío)
+Child's birthdate (DDMMYYYY): (vacío)
+
+Pet's name: (vacío)
+Company name: (vacío)
+
+Add some key words about the victim?: N
+Add special chars at the end of words?: Y
+Add random numbers at the end of words?: Y
+Leet mode (e.g. 1337)?: Y
+```
+
+y encontramos la contraseña del usuario:
+
+![[Pasted image 20260824212743.png]]
 
 
+```
+i.cassini:1r3n3!$%
+```
+
+Nos conectamos por FTP:
 
 
