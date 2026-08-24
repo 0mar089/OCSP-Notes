@@ -218,5 +218,15 @@ Y por ultimo ocn hashcat creamos la wordlist:
 hashcat --force irene_base.txt -r irene_rules.rule --stdout | sort -u > irene_wordlist.txt
 ```
 
-Y procedemos a hacer un ataque a ssh con el usuario i.cassini que se encuentra en el /etc/passwd:
+Y claro, no tenemos ssh pero como hemos visto un archivo llamado ftppolicies.txt y a la vez si ejecutamos el comando **ss -tulnp** obtenemos:
+
+```
+www-data@gattaca:/var/www$ ss -tulnp
+Netid     State      Recv-Q     Send-Q          Local Address:Port           Peer Address:Port     Process     
+udp       UNCONN     0          0                     0.0.0.0:68                  0.0.0.0:*                    
+tcp       LISTEN     0          32                    0.0.0.0:21                  0.0.0.0:*                    
+tcp       LISTEN     0          511                         *:80                        *:*      
+```
+
+
 
