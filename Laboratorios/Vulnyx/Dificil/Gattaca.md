@@ -228,5 +228,9 @@ tcp       LISTEN     0          32                    0.0.0.0:21                
 tcp       LISTEN     0          511                         *:80                        *:*      
 ```
 
-El problema esque solo esta abierto desde dentro. 
+El problema esque solo esta abierto desde dentro, no podemos acceder desde fuera. NO tenemos opcion de cambiar el firewall ya que no tenemos permisos. Asi que la unica forma es con la herramienta llamada **chisel**. 
+
+Chisel permite crear un tunnel TCP/UDP y llevarlo sobre HTTP. Asi que usaremos eso para hacer una especia de port forwarding para aceder a ftp. 
+
+
 
