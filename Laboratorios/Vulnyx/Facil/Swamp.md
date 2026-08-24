@@ -6,7 +6,7 @@
 
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos en la máquina objetivo:
 
-![Pasted image 20260805224509.png](<../../../.gitbook/assets/Pasted image 20260805224509.png>)
+![[Pasted image 20260805224509.png]]
 
 **Servicios identificados:**
 
@@ -33,7 +33,7 @@ Ejecutamos dig para solicitar la transferencia de zona:
 dig axfr @192.168.1.145 swamp.nyx
 ```
 
-![Pasted image 20260805225355.png](<../../../.gitbook/assets/Pasted image 20260805225355.png>)
+![[Pasted image 20260805225355.png]]
 
 * **Subdominios Descubiertos:** La transferencia de zona expone múltiples subdominios activos. Los registramos en nuestro `/etc/hosts`:
 
@@ -83,7 +83,7 @@ El fuzzing no reporta directorios adicionales.
 
 Al analizar detalladamente el código fuente de `farfaraway.swamp.nyx`, identificamos un bloque de código JavaScript ofuscado:
 
-![Pasted image 20260808005938.png](<../../../.gitbook/assets/Pasted image 20260808005938.png>)
+![[Pasted image 20260808005938.png]]
 
 * **Deofuscación:** El script utiliza una ofuscación de tipo Packer. Utilizamos herramientas de deofuscación (como UNPacker o herramientas online de formateo) para revelar su contenido original.
 * **Credenciales Encontradas:** El script expone en texto plano las credenciales del usuario:
@@ -100,7 +100,7 @@ Realizamos la conexión mediante SSH utilizando las credenciales obtenidas:
 ssh shrek@192.168.1.145
 ```
 
-![Pasted image 20260808010028.png](<../../../.gitbook/assets/Pasted image 20260808010028.png>)
+![[Pasted image 20260808010028.png]]
 
 * **Acceso:** Obtenemos una shell inicial en el sistema bajo la identidad del usuario shrek.
 
@@ -116,7 +116,7 @@ Como usuario shrek, comprobamos los permisos de sudo asignados en el sistema:
 sudo -l
 ```
 
-![Pasted image 20260808010159.png](<../../../.gitbook/assets/Pasted image 20260808010159.png>)
+![[Pasted image 20260808010159.png]]
 
 * **Vulnerabilidad de Configuración:** El usuario shrek está autorizado a ejecutar un comando/script personalizado con privilegios de root sin proporcionar contraseña.
 
@@ -126,7 +126,7 @@ Al interactuar con el binario autorizado, observamos que permite pasar argumento
 
 Inyectamos un comando directamente en el parámetro/cabecera esperado:
 
-![Pasted image 20260808010308.png](<../../../.gitbook/assets/Pasted image 20260808010308.png>)
+![[Pasted image 20260808010308.png]]
 
 Para elevar privilegios, inyectamos la ejecución de una terminal bash:
 
@@ -134,7 +134,7 @@ Para elevar privilegios, inyectamos la ejecución de una terminal bash:
 /bin/bash
 ```
 
-![Pasted image 20260808010345.png](<../../../.gitbook/assets/Pasted image 20260808010345.png>)
+![[Pasted image 20260808010345.png]]
 
 * **Resultado:** Obtenemos acceso completo como root con privilegios totales en la máquina.
 

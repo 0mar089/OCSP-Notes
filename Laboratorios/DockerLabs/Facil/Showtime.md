@@ -6,7 +6,7 @@
 
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos:
 
-![Pasted image 20260701221336.png](<../../../.gitbook/assets/Pasted image 20260701221336.png>)
+![[Pasted image 20260701221336.png]]
 
 **Servicios identificados:**
 
@@ -21,13 +21,13 @@ Realizamos un escaneo de puertos inicial con nmap para identificar los servicios
 
 Evaluamos el sitio web utilizando whatweb:
 
-![Pasted image 20260701221430.png](<../../../.gitbook/assets/Pasted image 20260701221430.png>)
+![[Pasted image 20260701221430.png]]
 
 * **Hallazgo:** Identificamos que el sitio utiliza la librería JQuery. Es importante registrar la versión en caso de que existan vulnerabilidades públicas asociadas.
 
 Al ingresar al sitio web, se muestra un diseño de casino:
 
-![Pasted image 20260701221545.png](<../../../.gitbook/assets/Pasted image 20260701221545.png>)
+![[Pasted image 20260701221545.png]]
 
 Los botones principales no cuentan con funcionalidad, excepto por el botón de login.
 
@@ -41,11 +41,11 @@ ffuf -w /usr/share/wordlist/SecLists/Discovery/Web-Content/DirBuster-2007_direct
 
 * **Hallazgo:** Identificamos el directorio `/login_page/`, el cual contiene múltiples archivos PHP como `db.php`, `auth.php` y la página de login:
 
-![Pasted image 20260701221856.png](<../../../.gitbook/assets/Pasted image 20260701221856.png>)
+![[Pasted image 20260701221856.png]]
 
 Accedemos a la página de login:
 
-![Pasted image 20260701221956.png](<../../../.gitbook/assets/Pasted image 20260701221956.png>)
+![[Pasted image 20260701221956.png]]
 
 ***
 
@@ -55,7 +55,7 @@ Accedemos a la página de login:
 
 Al ingresar caracteres especiales (comillas simples) en el formulario de login, la aplicación devuelve un error de sintaxis SQL:
 
-![Pasted image 20260701222042.png](<../../../.gitbook/assets/Pasted image 20260701222042.png>)
+![[Pasted image 20260701222042.png]]
 
 Esto nos confirma la presencia de una inyección SQL (SQLi). Ver teoría en [SQL Injection Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md>).
 
@@ -65,7 +65,7 @@ Logramos saltarnos el formulario (login bypass) utilizando un payload clásico d
 admin' or 1=1 -- -
 ```
 
-![Pasted image 20260701222255.png](<../../../.gitbook/assets/Pasted image 20260701222255.png>)
+![[Pasted image 20260701222255.png]]
 
 Sin embargo, el bypass no nos proporciona información crítica de forma directa. Para extraer la base de datos completa de forma estructurada, utilizamos sqlmap apuntando al endpoint de autenticación `/login_page/auth.php` enviando parámetros POST:
 
@@ -73,7 +73,7 @@ Sin embargo, el bypass no nos proporciona información crítica de forma directa
 sqlmap -u "http://172.17.0.2/login_page/auth.php" --data "usuario=admin&contraseña=test" -D users -T usuarios --dump
 ```
 
-![Pasted image 20260701232410.png](<../../../.gitbook/assets/Pasted image 20260701232410.png>)
+![[Pasted image 20260701232410.png]]
 
 * **Resultado:** sqlmap dumpea con éxito la tabla `usuarios` de la base de datos `users`, revelando las siguientes credenciales: `joe:MiClaveEsInhackeable`.
 
@@ -81,11 +81,11 @@ sqlmap -u "http://172.17.0.2/login_page/auth.php" --data "usuario=admin&contrase
 
 Iniciamos sesión en la web utilizando las credenciales obtenidas (`joe:MiClaveEsInhackeable`), lo cual nos da acceso a un panel administrativo que permite ejecutar código Python:
 
-![Pasted image 20260701232613.png](<../../../.gitbook/assets/Pasted image 20260701232613.png>)
+![[Pasted image 20260701232613.png]]
 
 El panel no sanitiza los inputs, lo que nos permite ejecutar comandos del sistema directamente:
 
-![Pasted image 20260701233119.png](<../../../.gitbook/assets/Pasted image 20260701233119.png>)
+![[Pasted image 20260701233119.png]]
 
 Utilizamos el entorno de Python para spawnear una shell inversa hacia nuestra máquina atacante:
 
@@ -103,9 +103,9 @@ Obtenemos con éxito una shell interactiva como el usuario de servicios web `www
 
 Enumeramos los archivos locales de la máquina tras obtener acceso inicial:
 
-![Pasted image 20260701222250.png](<../../../.gitbook/assets/Pasted image 20260701222250.png>)
+![[Pasted image 20260701222250.png]]
 
-![Pasted image 20260702003123.png](<../../../.gitbook/assets/Pasted image 20260702003123.png>)
+![[Pasted image 20260702003123.png]]
 
 * **Hallazgo:** Descubrimos un archivo de texto oculto llamado `.hidden_text.txt` que contiene un listado de palabras en mayúsculas relacionadas con GTA San Andreas.
 *   **Preparación de Wordlist:** Para realizar un ataque de fuerza bruta sobre los usuarios del sistema, convertimos todas las palabras a minúsculas para generar un diccionario limpio:
@@ -115,7 +115,7 @@ Enumeramos los archivos locales de la máquina tras obtener acceso inicial:
     ```
 * **Ataque de Fuerza Bruta:** Verificamos los usuarios locales en `/etc/passwd` e identificamos a `joe` y `luciano`. Realizamos un ataque de fuerza bruta utilizando el nuevo diccionario contra el servicio SSH o comando su:
 
-![Pasted image 20260702003252.png](<../../../.gitbook/assets/Pasted image 20260702003252.png>)
+![[Pasted image 20260702003252.png]]
 
 * **Resultado:** Logramos autenticarnos como el usuario `joe`.
 
@@ -147,7 +147,7 @@ Ejecutamos el script utilizando privilegios de sudo:
 sudo /home/luciano/script.sh
 ```
 
-![Pasted image 20260702003400.png](<../../../.gitbook/assets/Pasted image 20260702003400.png>)
+![[Pasted image 20260702003400.png]]
 
 ¡Recibimos la conexión inversa en el puerto 4444 obteniendo una shell interactiva como el usuario root!
 

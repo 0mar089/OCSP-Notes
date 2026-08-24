@@ -6,7 +6,7 @@
 
 Realizamos el escaneo inicial con nmap e identificamos el puerto 80 HTTP y el puerto 22 SSH abierto:
 
-![Pasted image 20260629235752.png](<../../../.gitbook/assets/Pasted image 20260629235752.png>)
+![[Pasted image 20260629235752.png]]
 
 **Servicios identificados:**
 
@@ -21,13 +21,13 @@ Realizamos el escaneo inicial con nmap e identificamos el puerto 80 HTTP y el pu
 
 Procedemos a realizar el análisis del servidor web:
 
-![Pasted image 20260629235837.png](<../../../.gitbook/assets/Pasted image 20260629235837.png>)
+![[Pasted image 20260629235837.png]]
 
-![Pasted image 20260630000014.png](<../../../.gitbook/assets/Pasted image 20260630000014.png>)
+![[Pasted image 20260630000014.png]]
 
 Al navegar por la web, identificamos un apartado de facturas ("bills"). Al acceder, nos muestra un panel de inicio de sesión:
 
-![Pasted image 20260630000041.png](<../../../.gitbook/assets/Pasted image 20260630000041.png>)
+![[Pasted image 20260630000041.png]]
 
 El panel parece vulnerable a inyección SQL (SQLi).
 
@@ -43,7 +43,7 @@ Al realizar una inyección SQL clásica para saltarse la autenticación, ingresa
 admin' or 1=1 -- -
 ```
 
-![Pasted image 20260630000141.png](<../../../.gitbook/assets/Pasted image 20260630000141.png>)
+![[Pasted image 20260630000141.png]]
 
 Para acceder como administrador y ver más opciones, refinamos el payload. El objetivo es que la base de datos devuelva la fila de admin específicamente:
 
@@ -53,7 +53,7 @@ admin' and 1=1-- -
 
 Al utilizar este payload, logramos acceder al panel administrativo:
 
-![Pasted image 20260630000956.png](<../../../.gitbook/assets/Pasted image 20260630000956.png>)
+![[Pasted image 20260630000956.png]]
 
 Ver guía teórica sobre inyecciones SQL en [SQL Injection Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md>).
 
@@ -67,7 +67,7 @@ http://172.17.0.2/bills/panel.php?id=fd
 
 Las facturas válidas parecen seguir una nomenclatura específica de tres letras seguidas de tres números (ej. xya456):
 
-![Pasted image 20260630001110.png](<../../../.gitbook/assets/Pasted image 20260630001110.png>)
+![[Pasted image 20260630001110.png]]
 
 Para enumerar todas las facturas en busca de datos sensibles, generamos una wordlist personalizada con crunch utilizando un patrón específico (dos letras fijas "xy", seguidas de un carácter alfabético comodín y tres caracteres numéricos comodines):
 
@@ -77,15 +77,15 @@ crunch 6 6 -t xy@%%% -o diccionario_corto.txt
 
 Utilizamos este diccionario en la búsqueda de IDs válidos:
 
-![Pasted image 20260630001642.png](<../../../.gitbook/assets/Pasted image 20260630001642.png>)
+![[Pasted image 20260630001642.png]]
 
 * **Hallazgo:** Identificamos la factura con el ID xyc724. Al acceder a ella, se muestran credenciales de usuario del sistema en texto claro:
 
-![Pasted image 20260630001725.png](<../../../.gitbook/assets/Pasted image 20260630001725.png>)
+![[Pasted image 20260630001725.png]]
 
 * **Acceso:** Probamos las credenciales obtenidas contra el servicio SSH y logramos ingresar con éxito:
 
-![Pasted image 20260630001811.png](<../../../.gitbook/assets/Pasted image 20260630001811.png>)
+![[Pasted image 20260630001811.png]]
 
 ***
 
@@ -95,7 +95,7 @@ Utilizamos este diccionario en la búsqueda de IDs válidos:
 
 Listamos los binarios del sistema que tienen configurados permisos SUID de ejecución:
 
-![Pasted image 20260630193443.png](<../../../.gitbook/assets/Pasted image 20260630193443.png>)
+![[Pasted image 20260630193443.png]]
 
 * **Vulnerabilidad de Configuración:** El comando env (/usr/bin/env) tiene el bit SUID activo. Ver teoría en [Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>).
 

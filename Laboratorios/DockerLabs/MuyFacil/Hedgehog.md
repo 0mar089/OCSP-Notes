@@ -6,7 +6,7 @@
 
 Iniciamos con un escaneo de puertos sobre la máquina objetivo para listar los servicios expuestos:
 
-![Pasted image 20260218193032.png](<../../../.gitbook/assets/Pasted image 20260218193032.png>)
+![[Pasted image 20260218193032.png]]
 
 **Servicios identificados:**
 
@@ -21,11 +21,11 @@ Iniciamos con un escaneo de puertos sobre la máquina objetivo para listar los s
 
 Realizamos un escaneo web básico con whatweb para identificar tecnologías:
 
-![Pasted image 20260218193109.png](<../../../.gitbook/assets/Pasted image 20260218193109.png>)
+![[Pasted image 20260218193109.png]]
 
 No se aprecian tecnologías complejas ni gestores de contenido. Hacemos una petición directa usando curl o el navegador para revisar el código fuente y contenido visible:
 
-![Pasted image 20260218193202.png](<../../../.gitbook/assets/Pasted image 20260218193202.png>)
+![[Pasted image 20260218193202.png]]
 
 * **Resultado:** La página web únicamente muestra el texto "tails". Esto nos sugiere un posible nombre de usuario para futuras fases.
 
@@ -33,7 +33,7 @@ No se aprecian tecnologías complejas ni gestores de contenido. Hacemos una peti
 
 Procedemos a realizar fuzzing de directorios para verificar si existen rutas ocultas:
 
-![Pasted image 20260218193241.png](<../../../.gitbook/assets/Pasted image 20260218193241.png>)
+![[Pasted image 20260218193241.png]]
 
 No se obtienen resultados fructíferos ni recursos adicionales a través del fuzzing web.
 
@@ -59,7 +59,7 @@ sed -i 's/ //g' rockyou_invertido.txt
 
 Lanzamos el ataque de fuerza bruta contra el servicio SSH utilizando el diccionario modificado:
 
-![Pasted image 20260218193506.png](<../../../.gitbook/assets/Pasted image 20260218193506.png>)
+![[Pasted image 20260218193506.png]]
 
 * **Credencial encontrada:** tails:password (identificada con éxito).
 * **Acceso:** Iniciamos sesión en el sistema vía SSH.
@@ -76,7 +76,7 @@ Una vez dentro del sistema con el usuario tails, enumeramos los permisos de ejec
 sudo -l
 ```
 
-![Pasted image 20260218194223.png](<../../../.gitbook/assets/Pasted image 20260218194223.png>)
+![[Pasted image 20260218194223.png]]
 
 * **Hallazgo:** El usuario tails puede ejecutar cualquier comando como el usuario sonic sin ingresar contraseña (NOPASSWD). Ver teoría en [Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>).
 * **Acción:** Pivotamos al usuario sonic ejecutando una shell en su nombre:
@@ -85,13 +85,13 @@ sudo -l
 sudo -u sonic /bin/bash
 ```
 
-![Pasted image 20260218194307.png](<../../../.gitbook/assets/Pasted image 20260218194307.png>)
+![[Pasted image 20260218194307.png]]
 
 #### Escalada Final a Root
 
 Una vez posicionados como el usuario sonic, buscamos la forma de escalar privilegios para convertirnos en root:
 
-![Pasted image 20260218194326.png](<../../../.gitbook/assets/Pasted image 20260218194326.png>)
+![[Pasted image 20260218194326.png]]
 
 \[Detalle de la obtención de la shell de root finalizada con éxito].
 

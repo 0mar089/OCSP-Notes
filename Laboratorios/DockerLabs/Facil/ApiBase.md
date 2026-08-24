@@ -6,7 +6,7 @@
 
 Realizamos un escaneo de puertos inicial para mapear los servicios expuestos:
 
-![Pasted image 20260222170431.png](<../../../.gitbook/assets/Pasted image 20260222170431.png>)
+![[Pasted image 20260222170431.png]]
 
 **Servicios identificados:**
 
@@ -20,24 +20,24 @@ Realizamos un escaneo de puertos inicial para mapear los servicios expuestos:
 
 Accedemos a la API web en el puerto 5000:
 
-![Pasted image 20260222170501.png](<../../../.gitbook/assets/Pasted image 20260222170501.png>)
+![[Pasted image 20260222170501.png]]
 
 El servidor nos informa sobre dos rutas principales: /add y /users.
 
 * Al intentar acceder a /add, el servidor responde con un error Method Not Allowed (método HTTP no permitido).
 * Al acceder a /users, la ruta responde exitosamente, pero indica la falta de parámetros:
 
-![Pasted image 20260222170549.png](<../../../.gitbook/assets/Pasted image 20260222170549.png>)
+![[Pasted image 20260222170549.png]]
 
 #### Fuzzing de Parámetros
 
 Para descubrir qué parámetro está esperando recibir el endpoint /users, realizamos un fuzzing de parámetros:
 
-![Pasted image 20260222170639.png](<../../../.gitbook/assets/Pasted image 20260222170639.png>)
+![[Pasted image 20260222170639.png]]
 
 Para refinar la búsqueda, excluimos las respuestas con una longitud de 35 caracteres (--exclude-length 35):
 
-![Pasted image 20260222170708.png](<../../../.gitbook/assets/Pasted image 20260222170708.png>)
+![[Pasted image 20260222170708.png]]
 
 * **Hallazgo:** Descubrimos el parámetro válido necesario para realizar consultas al endpoint de usuarios.
 
@@ -49,19 +49,19 @@ Para refinar la búsqueda, excluimos las respuestas con una longitud de 35 carac
 
 Usando el parámetro descubierto, enviamos nombres de prueba. Al ingresar el nombre d'anne, la aplicación web devuelve un error de sintaxis de base de datos SQL:
 
-![Pasted image 20260222171122.png](<../../../.gitbook/assets/Pasted image 20260222171122.png>)
+![[Pasted image 20260222171122.png]]
 
 Confirmamos la presencia de un error SQL:
 
-![Pasted image 20260222171157.png](<../../../.gitbook/assets/Pasted image 20260222171157.png>)
+![[Pasted image 20260222171157.png]]
 
 Aprovechamos este error para ejecutar una inyección SQL (SQLi) clásica para saltarse o extraer información de la base de datos:
 
-![Pasted image 20260222172119.png](<../../../.gitbook/assets/Pasted image 20260222172119.png>)
+![[Pasted image 20260222172119.png]]
 
 * **Resultado:** Logramos enumerar y extraer nombres de usuarios válidos del sistema. Ver guía en [SQL Injection Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/01-SQL_Injection/Cheat Sheet.md>). Con este listado de usuarios, realizamos un intento de conexión por SSH:
 
-![Pasted image 20260222173100.png](<../../../.gitbook/assets/Pasted image 20260222173100.png>)
+![[Pasted image 20260222173100.png]]
 
 Establecemos con éxito una sesión en el servidor.
 
@@ -81,7 +81,7 @@ python3 -m http.server 8000
 
 Descargamos el archivo y lo abrimos con Wireshark:
 
-![Pasted image 20260222173217.png](<../../../.gitbook/assets/Pasted image 20260222173217.png>)
+![[Pasted image 20260222173217.png]]
 
 * **Hallazgo Crítico:** Analizando las tramas de red capturadas correspondientes al servicio FTP, logramos extraer las credenciales en texto plano enviadas durante el proceso de autenticación. Ver teoría en [FTP.md](<../../../Pentesting Notes/1_Enumeration/FTP.md>).
 * **Credenciales de Root encontradas:** root:balulero

@@ -6,7 +6,7 @@
 
 Realizamos un escaneo inicial con nmap para enumerar los servicios activos de la máquina objetivo:
 
-![Pasted image 20260214175919.png](<../../../.gitbook/assets/Pasted image 20260214175919.png>)
+![[Pasted image 20260214175919.png]]
 
 **Servicios identificados:**
 
@@ -21,7 +21,7 @@ Realizamos un escaneo inicial con nmap para enumerar los servicios activos de la
 
 Evaluamos las tecnologías utilizadas por el sitio web mediante whatweb:
 
-![Pasted image 20260214180028.png](<../../../.gitbook/assets/Pasted image 20260214180028.png>)
+![[Pasted image 20260214180028.png]]
 
 No se muestran indicios de CMS o frameworks vulnerables.
 
@@ -29,7 +29,7 @@ No se muestran indicios de CMS o frameworks vulnerables.
 
 Accedemos al sitio web a través del navegador:
 
-![Pasted image 20260214180110.png](<../../../.gitbook/assets/Pasted image 20260214180110.png>)
+![[Pasted image 20260214180110.png]]
 
 * **Hallazgo:** La página web se encuentra totalmente en blanco. Lo único rescatable son comentarios y referencias en el código fuente. Decidimos realizar fuzzing de directorios.
 
@@ -37,15 +37,15 @@ Accedemos al sitio web a través del navegador:
 
 Iniciamos la búsqueda de directorios ocultos. Tras identificar ciertas rutas iniciales, realizamos un fuzzing recursivo que nos revela directorios anidados:
 
-![Pasted image 20260214182642.png](<../../../.gitbook/assets/Pasted image 20260214182642.png>)
+![[Pasted image 20260214182642.png]]
 
 Fuzzeamos la ruta /javascript encontrada:
 
-![Pasted image 20260214182710.png](<../../../.gitbook/assets/Pasted image 20260214182710.png>)
+![[Pasted image 20260214182710.png]]
 
 Y repetimos la búsqueda de recursos hasta obtener códigos de respuesta exitosos (200 OK):
 
-![Pasted image 20260214182730.png](<../../../.gitbook/assets/Pasted image 20260214182730.png>)
+![[Pasted image 20260214182730.png]]
 
 * **Resultado:** La ruta final encontrada contiene únicamente la librería jquery, por lo que descartamos vectores de ataque directos por esta vía web.
 
@@ -57,12 +57,12 @@ Y repetimos la búsqueda de recursos hasta obtener códigos de respuesta exitoso
 
 A partir de la enumeración anterior, identificamos posibles usuarios en el sistema. Procedemos a realizar un ataque de fuerza bruta por SSH contra estas cuentas:
 
-![Pasted image 20260214183345.png](<../../../.gitbook/assets/Pasted image 20260214183345.png>)
+![[Pasted image 20260214183345.png]]
 
 * **Credencial encontrada:** Logramos obtener una contraseña válida para uno de los usuarios analizados.
 * **Acceso:** Iniciamos sesión vía SSH en el servidor:
 
-![Pasted image 20260214183820.png](<../../../.gitbook/assets/Pasted image 20260214183820.png>)
+![[Pasted image 20260214183820.png]]
 
 #### Pivotaje de Usuario (juan)
 
@@ -70,7 +70,7 @@ Durante la fase de enumeración interna tras el acceso inicial, revisamos el cor
 
 * **Acción:** Usamos la contraseña obtenida para conectarnos nuevamente vía SSH, esta vez como el usuario juan:
 
-![Pasted image 20260214183941.png](<../../../.gitbook/assets/Pasted image 20260214183941.png>)
+![[Pasted image 20260214183941.png]]
 
 ***
 
@@ -84,7 +84,7 @@ Una vez dentro del sistema con la cuenta de juan, buscamos binarios o permisos e
 sudo -l
 ```
 
-![Pasted image 20260214184020.png](<../../../.gitbook/assets/Pasted image 20260214184020.png>)
+![[Pasted image 20260214184020.png]]
 
 * **Vulnerabilidad de Configuración:** El usuario juan tiene permisos para ejecutar el intérprete de programación /usr/bin/ruby con máximos privilegios (root) sin ingresar contraseña (NOPASSWD). Ver teoría en [Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>).
 
@@ -98,7 +98,7 @@ Ejecutamos:
 sudo ruby -e 'exec "/bin/bash"'
 ```
 
-![Pasted image 20260214184109.png](<../../../.gitbook/assets/Pasted image 20260214184109.png>)
+![[Pasted image 20260214184109.png]]
 
 ¡Conseguimos con éxito una shell interactiva como el usuario root!
 

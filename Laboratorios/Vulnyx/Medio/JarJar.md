@@ -5,7 +5,7 @@
 ### Escaneo de Puertos (Nmap)
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos en la máquina objetivo:
 
-![Pasted image 20260821172547.png](../../../assets/Pasted%20image%2020260821172547.png)
+![[Pasted image 20260821172547.png]]
 
 **Servicios identificados:**
 * **Puerto 22/TCP (SSH):** Servicio OpenSSH para acceso remoto por terminal. Ver teoría en [SSH.md](../../../Pentesting%20Notes/1_Enumeration/SSH.md).
@@ -24,21 +24,21 @@ Realizamos un escaneo de puertos inicial con nmap para identificar los servicios
 ### Inspección del Servidor Web (WhatWeb y Virtual Hosting)
 Analizamos las tecnologías y cabeceras del servidor web mediante `whatweb`:
 
-![Pasted image 20260821172751.png](../../../assets/Pasted%20image%2020260821172751.png)
+![[Pasted image 20260821172751.png]]
 
 Identificamos Apache 2.4.61, PHP 8.2.20 y una versión desactualizada de jQuery. Al evaluar la navegación encontramos dos comportamientos diferenciados según la cabecera `Host`:
 
 1. **Acceso directo por dirección IP:** El servidor muestra una página genérica con un video de fondo. La inspección de su código fuente no revela recursos ni datos de interés:
 
-![Pasted image 20260821172950.png](../../../assets/Pasted%20image%2020260821172950.png)
+![[Pasted image 20260821172950.png]]
 
 2. **Acceso mediante el dominio `http://jarjar.nyx`:** El servidor responde con el sitio corporativo principal, el cual cuenta con varias secciones y un panel de autenticación:
 
-![Pasted image 20260821172900.png](../../../assets/Pasted%20image%2020260821172900.png)
+![[Pasted image 20260821172900.png]]
 
 Al explorar el sitio localizamos el formulario de inicio de sesión (`/login.php`):
 
-![Pasted image 20260821173131.png](../../../assets/Pasted%20image%2020260821173131.png)
+![[Pasted image 20260821173131.png]]
 
 ### Fuzzing de Directorios Web (ffuf y dirsearch)
 Realizamos fuzzing de rutas y recursos web mediante `ffuf` para descubrir directorios y archivos ocultos:
@@ -47,7 +47,7 @@ Realizamos fuzzing de rutas y recursos web mediante `ffuf` para descubrir direct
 ffuf -w /usr/share/wordlists/SecLists/Discovery/Web-Content/DirBuster-2007_directory-list-lowercase-2.3-big.txt -u "http://jarjar.nyx/FUZZ" -c -ic -fc 403 -e .php,.txt,.py,.js,.bak,.html,.json
 ```
 
-![Pasted image 20260821173323.png](../../../assets/Pasted%20image%2020260821173323.png)
+![[Pasted image 20260821173323.png]]
 
 De manera complementaria, ejecutamos `dirsearch` contra la raíz del sitio web:
 
@@ -57,22 +57,22 @@ dirsearch -u http://jarjar.nyx/
 
 Ver guía y opciones avanzadas en [Fuzzing Cheat Sheet](../../../Pentesting%20Notes/Web/Fuzzing/Cheat%20Sheet.md).
 
-![Pasted image 20260821173448.png](../../../assets/Pasted%20image%2020260821173448.png)
+![[Pasted image 20260821173448.png]]
 
 Procedemos a inspeccionar los archivos descubiertos con código de estado **200 OK**:
 
 * **`about.php`:**
 
-![Pasted image 20260821173558.png](../../../assets/Pasted%20image%2020260821173558.png)
+![[Pasted image 20260821173558.png]]
 
 * **`header.php`:**
 
-![Pasted image 20260821173722.png](../../../assets/Pasted%20image%2020260821173722.png)
+![[Pasted image 20260821173722.png]]
 
 * **`config.php`:** Archivo PHP vacío en la respuesta HTTP (procesamiento backend sin salida directa).
 * **`contact.php`:**
 
-![Pasted image 20260821173859.png](../../../assets/Pasted%20image%2020260821173859.png)
+![[Pasted image 20260821173859.png]]
 
 * **`admin.php`:** Panel de administración protegido por redirección.
 
@@ -81,14 +81,14 @@ Procedemos a inspeccionar los archivos descubiertos con código de estado **200 
 ### Análisis de Autenticación y Enumeración de Usuarios
 Interceptamos la petición de login hacia `/login.php` mediante Burp Suite:
 
-![Pasted image 20260821174432.png](../../../assets/Pasted%20image%2020260821174432.png)
+![[Pasted image 20260821174432.png]]
 
 Se descarta inyección SQL inicial tras probar distintos vectores. Procedemos a evaluar nombres de usuario potenciales extraídos de la temática del sitio web (`hansolo`, `luke`, `leia`, `jarjar`, `obiwan`).
 
 * **Vulnerabilidad de Enumeración de Usuarios (Respuesta Diferencial):**
   * Al ingresar el usuario **`jarjar`**, el servidor responde con el mensaje específico: **`Invalid Password`**:
 
-![Pasted image 20260821180531.png](../../../assets/Pasted%20image%2020260821180531.png)
+![[Pasted image 20260821180531.png]]
 
   * Al ingresar cualquier otro usuario no existente, la respuesta es genérica: **`Invalid username or Password`**.
 
@@ -105,11 +105,11 @@ El ataque de fuerza bruta web no produce resultados inmediatos dentro del diccio
 ### Análisis del Panel Administrativo (admin.php) y Flujo de Redirección (302 Bypass)
 Al solicitar directamente el recurso `GET /admin.php`, el servidor emite una cabecera de redirección **302 Found**. Sin embargo, el script PHP no finaliza la ejecución tras enviar la cabecera (vulnerabilidad *Execution After Redirect* / EAR), por lo que el cuerpo completo del panel administrativo es devuelto en la respuesta HTTP:
 
-![Pasted image 20260821181526.png](../../../assets/Pasted%20image%2020260821181526.png)
+![[Pasted image 20260821181526.png]]
 
 Interceptando la respuesta con Burp Suite y modificando el código de estado de **302 Found** a **200 OK**, la interfaz administrativa se renderiza de forma íntegra en el navegador:
 
-![Pasted image 20260821181627.png](../../../assets/Pasted%20image%2020260821181627.png)
+![[Pasted image 20260821181627.png]]
 
 Dentro de la sección de visualización de logs administrativos, descubrimos un endpoint con paso de parámetros:
 
@@ -117,7 +117,7 @@ Dentro de la sección de visualización de logs administrativos, descubrimos un 
 http://jarjar.nyx/secure_files_admin/files.php?logs=error.log
 ```
 
-![Pasted image 20260821181915.png](../../../assets/Pasted%20image%2020260821181915.png)
+![[Pasted image 20260821181915.png]]
 
 ---
 
@@ -139,7 +139,7 @@ El mecanismo de filtrado / WAF valida que la ruta empiece por el prefijo esperad
 
 Ver técnicas de evasión y payloads en [Path Traversal Cheat Sheet](../../../Pentesting%20Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat%20Sheet.md).
 
-![Pasted image 20260821222223.png](../../../assets/Pasted%20image%2020260821222223.png)
+![[Pasted image 20260821222223.png]]
 
 * **Impacto:** Confirmamos la vulnerabilidad de **Local File Inclusion (LFI)** al recuperar el archivo `/etc/passwd`, validando que **`jarjar`** es un usuario con shell interactiva en el sistema.
 
@@ -160,12 +160,12 @@ Dado que el servicio OpenSSH está activo y el usuario `jarjar` posee directorio
 1. **Clave Pública SSH:**
    Consultamos `/home/jarjar/.ssh/id_rsa.pub` confirmando la existencia de claves generadas:
 
-![Pasted image 20260821231712.png](../../../assets/Pasted%20image%2020260821231712.png)
+![[Pasted image 20260821231712.png]]
 
 2. **Clave Privada SSH:**
    Consultamos `/home/jarjar/.ssh/id_rsa` y recuperamos la clave privada RSA completa:
 
-![Pasted image 20260821232117.png](../../../assets/Pasted%20image%2020260821232117.png)
+![[Pasted image 20260821232117.png]]
 
 Guardamos la clave privada en nuestra máquina local, ajustamos los permisos correspondientes y establecemos conexión SSH:
 
@@ -174,18 +174,18 @@ chmod 600 id_rsa
 ssh -i id_rsa jarjar@jarjar.nyx
 ```
 
-![Pasted image 20260821232325.png](../../../assets/Pasted%20image%2020260821232325.png)
+![[Pasted image 20260821232325.png]]
 
 * **Acceso inicial:** Obtenemos una shell interactiva como el usuario **`jarjar`** y leemos la flag de usuario:
 
-![Pasted image 20260821232257.png](../../../assets/Pasted%20image%2020260821232257.png)
+![[Pasted image 20260821232257.png]]
 
 ---
 
 ### Enumeración de Base de Datos (MariaDB / MySQL)
 Con acceso local al sistema, inspeccionamos el archivo `/var/www/html/config.php` para obtener las credenciales de la base de datos MariaDB:
 
-![Pasted image 20260821232921.png](../../../assets/Pasted%20image%2020260821232921.png)
+![[Pasted image 20260821232921.png]]
 
 Nos conectamos al servicio local MariaDB y extraemos las credenciales y hashes almacenados de los demás usuarios del portal. Ver teoría de comandos en [MySQL.md](../../../Pentesting%20Notes/1_Enumeration/MySQL.md).
 
@@ -200,7 +200,7 @@ Realizamos una enumeración de binarios con el bit SUID activo en el sistema:
 find / -perm -4000 -type f 2>/dev/null
 ```
 
-![Pasted image 20260821233213.png](../../../assets/Pasted%20image%2020260821233213.png)
+![[Pasted image 20260821233213.png]]
 
 * **Vulnerabilidad de Configuración:** El binario `/usr/bin/ab` (Apache Benchmark) tiene asignados permisos **SUID** con propietario root. Ver teoría en [Linux Privilege Escalation - Permissions.md](../../../Pentesting%20Notes/3_Post-Explotation/Linux%20Privilage%20Escalation/Permissions.md).
 
@@ -221,7 +221,7 @@ nc -lnvp 8001
 
 3. Recibimos la petición HTTP POST en nuestro listener con el volcado íntegro de `/etc/shadow`:
 
-![Pasted image 20260821233944.png](../../../assets/Pasted%20image%2020260821233944.png)
+![[Pasted image 20260821233944.png]]
 
 Extraemos el hash del superusuario **`root`**:
 
@@ -240,7 +240,7 @@ john --format=crypt --wordlist=/usr/share/wordlists/SecLists/Passwords/Leaked-Da
 
 Ver opciones avanzadas de descifrado en [Password Cracking.md](../../../Pentesting%20Notes/2_Password-Attacks/Password%20Cracking.md).
 
-![Pasted image 20260821235524.png](../../../assets/Pasted%20image%2020260821235524.png)
+![[Pasted image 20260821235524.png]]
 
 Una vez recuperada la contraseña en texto claro de root, ejecutamos `su root` en la terminal para elevar privilegios:
 
@@ -248,7 +248,7 @@ Una vez recuperada la contraseña en texto claro de root, ejecutamos `su root` e
 su root
 ```
 
-![Pasted image 20260821235707.png](../../../assets/Pasted%20image%2020260821235707.png)
+![[Pasted image 20260821235707.png]]
 
 * **Control Total:** Obtenemos una shell interactiva con máximos privilegios (`uid=0(root)`) y leemos la flag final de root (`root.txt`).
 

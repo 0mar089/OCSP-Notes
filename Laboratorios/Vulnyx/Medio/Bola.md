@@ -6,7 +6,7 @@
 
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos en la máquina objetivo:
 
-![Pasted image 20260818231631.png](<../../../.gitbook/assets/Pasted image 20260818231631.png>)
+![[Pasted image 20260818231631.png]]
 
 **Servicios identificados:**
 
@@ -27,15 +27,15 @@ Realizamos un escaneo de puertos inicial con nmap para identificar los servicios
 
 Analizamos las tecnologías y cabeceras del servidor web mediante `whatweb`:
 
-![Pasted image 20260818231739.png](<../../../.gitbook/assets/Pasted image 20260818231739.png>)
+![[Pasted image 20260818231739.png]]
 
 Accedemos a través del navegador a `http://bola.nyx`, encontrándonos con la página corporativa principal:
 
-![Pasted image 20260818231608.png](<../../../.gitbook/assets/Pasted image 20260818231608.png>)
+![[Pasted image 20260818231608.png]]
 
 Al explorar las rutas accesibles, localizamos un formulario de inicio de sesión en `/login/login.php`:
 
-![Pasted image 20260818232215.png](<../../../.gitbook/assets/Pasted image 20260818232215.png>)
+![[Pasted image 20260818232215.png]]
 
 #### Fuzzing de Directorios Web (ffuf y dirsearch)
 
@@ -45,7 +45,7 @@ Dado que no disponemos de credenciales iniciales para el login, procedemos a rea
 ffuf -u "http://bola.nyx/FUZZ" -w /usr/share/wordlists/SecLists/Discovery/Web-Content/DirBuster-2007_directory-list-lowercase-2.3-big.txt -e .php -t 40
 ```
 
-![Pasted image 20260818232205.png](<../../../.gitbook/assets/Pasted image 20260818232205.png>)
+![[Pasted image 20260818232205.png]]
 
 Identificamos directorios y archivos clave como `/admin`, `/login`, `download.php` e `index.php`. Realizamos un fuzzing más profundo sobre el directorio `/admin`:
 
@@ -53,7 +53,7 @@ Identificamos directorios y archivos clave como `/admin`, `/login`, `download.ph
 ffuf -u "http://bola.nyx/admin/FUZZ" -w /usr/share/wordlists/SecLists/Discovery/Web-Content/DirBuster-2007_directory-list-lowercase-2.3-big.txt -e .php -t 40
 ```
 
-![Pasted image 20260818232623.png](<../../../.gitbook/assets/Pasted image 20260818232623.png>)
+![[Pasted image 20260818232623.png]]
 
 De manera complementaria, ejecutamos `dirsearch` contra la raíz del sitio web para descubrir rutas adicionales y archivos ocultos:
 
@@ -63,7 +63,7 @@ dirsearch -u http://bola.nyx/
 
 Ver guía y opciones avanzadas en [Fuzzing Cheat Sheet](<../../../Pentesting Notes/Web/Fuzzing/Cheat Sheet.md>).
 
-![Pasted image 20260819000356.png](<../../../.gitbook/assets/Pasted image 20260819000356.png>)
+![[Pasted image 20260819000356.png]]
 
 #### Análisis de Endpoints Descubiertos (.well-known)
 
@@ -75,7 +75,7 @@ El análisis con `dirsearch` revela dos recursos de gran relevancia bajo el dire
     http://bola.nyx/.well-known/openid-configuration
     ```
 
-    ![Pasted image 20260819000727.png](<../../../.gitbook/assets/Pasted image 20260819000727.png>)
+    ![[Pasted image 20260819000727.png]]
 
     **Usuarios identificados:**
 
@@ -88,7 +88,7 @@ El análisis con `dirsearch` revela dos recursos de gran relevancia bajo el dire
     http://bola.nyx/.well-known/security.txt
     ```
 
-    ![Pasted image 20260819000806.png](<../../../.gitbook/assets/Pasted image 20260819000806.png>)
+    ![[Pasted image 20260819000806.png]]
 
 ***
 
@@ -102,7 +102,7 @@ Comprobamos inicialmente si el servicio RSYNC permite listar recursos o módulos
 rsync rsync://bola.nyx
 ```
 
-![Pasted image 20260819002831.png](<../../../.gitbook/assets/Pasted image 20260819002831.png>)
+![[Pasted image 20260819002831.png]]
 
 Al no obtener listado público, procedemos a realizar fuerza bruta sobre los nombres de los módulos compartidos utilizando la herramienta `rsync-brute`:
 
@@ -110,7 +110,7 @@ Al no obtener listado público, procedemos a realizar fuerza bruta sobre los nom
 rsync-brute -t 192.168.1.119 -p 873 -w /usr/share/wordlists/SecLists/Discovery/Web-Content/DirBuster-2007_directory-list-2.3-medium.txt
 ```
 
-![Pasted image 20260820022031.png](<../../../.gitbook/assets/Pasted image 20260820022031.png>)
+![[Pasted image 20260820022031.png]]
 
 * **Hallazgo:** Descubrimos el módulo compartido denominado **`extensions`**.
 
@@ -122,7 +122,7 @@ Listamos y descargamos los contenidos disponibles en el recurso `extensions`:
 rsync rsync://bola.nyx/extensions
 ```
 
-![Pasted image 20260820022112.png](<../../../.gitbook/assets/Pasted image 20260820022112.png>)
+![[Pasted image 20260820022112.png]]
 
 Descargamos los archivos expuestos:
 
@@ -131,7 +131,7 @@ Descargamos los archivos expuestos:
 
 Al descomprimir el archivo ZIP, inspeccionamos los archivos JavaScript contenidos y localizamos en `background.js` credenciales predeterminadas hardcodeadas:
 
-![Pasted image 20260820022309.png](<../../../.gitbook/assets/Pasted image 20260820022309.png>)
+![[Pasted image 20260820022309.png]]
 
 ```
 jackie0x17@nyx.com:sbIJ0x9g{C3`
@@ -145,7 +145,7 @@ jackie0x17@nyx.com:sbIJ0x9g{C3`
 
 Utilizamos las credenciales obtenidas para autenticarnos a través del panel de login (`/login/login.php`):
 
-![Pasted image 20260820022459.png](<../../../.gitbook/assets/Pasted image 20260820022459.png>)
+![[Pasted image 20260820022459.png]]
 
 Una vez dentro de `Portal Manager` (`/admin/admin.php`), observamos una sección con documentos descargables donde encontramos el archivo:
 
@@ -171,11 +171,11 @@ echo -n "ct0l4" | md5sum
 # 4a8f81d01d65d3468955191045816c85
 ```
 
-![Pasted image 20260820023916.png](<../../../.gitbook/assets/Pasted image 20260820023916.png>)
+![[Pasted image 20260820023916.png]]
 
 Intentamos descargar `http://bola.nyx/download.php?file_name=4a8f81d01d65d3468955191045816c85.pdf`:
 
-![Pasted image 20260820024013.png](<../../../.gitbook/assets/Pasted image 20260820024013.png>)
+![[Pasted image 20260820024013.png]]
 
 * **Resultado:** El archivo no se encuentra disponible (`Error: File does not exist`).
 
@@ -188,11 +188,11 @@ echo -n "d4t4s3c" | md5sum
 # 97035ded598faa2ce8ff63f7f9dd3b70
 ```
 
-![Pasted image 20260820024130.png](<../../../.gitbook/assets/Pasted image 20260820024130.png>)
+![[Pasted image 20260820024130.png]]
 
 Solicitamos la descarga de `http://bola.nyx/download.php?file_name=97035ded598faa2ce8ff63f7f9dd3b70.pdf`:
 
-![Pasted image 20260820024117.png](<../../../.gitbook/assets/Pasted image 20260820024117.png>)
+![[Pasted image 20260820024117.png]]
 
 * **Resultado:** Descargamos con éxito el documento privado titulado **"WSDL Server VulNyx - How to Connect"**.
 
@@ -200,7 +200,7 @@ Solicitamos la descarga de `http://bola.nyx/download.php?file_name=97035ded598fa
 
 Al revisar detalladamente el contenido del documento PDF descargado, encontramos un ejemplo de implementación de un servicio WSDL en Python utilizando la librería `Spyne`:
 
-![Pasted image 20260820030214.png](<../../../.gitbook/assets/Pasted image 20260820030214.png>)
+![[Pasted image 20260820030214.png]]
 
 En el fragmento de código se expone una contraseña hardcodeada:
 
@@ -214,7 +214,7 @@ Probamos las credenciales descubiertas contra el servicio SSH para el usuario `d
 ssh d4t4s3c@bola.nyx
 ```
 
-![Pasted image 20260820030303.png](<../../../.gitbook/assets/Pasted image 20260820030303.png>)
+![[Pasted image 20260820030303.png]]
 
 * **Acceso obtenido:** Obtenemos una shell interactiva en el servidor bajo la identidad del usuario de bajos privilegios **`d4t4s3c`**.
 
@@ -232,17 +232,17 @@ Para interactuar con el servicio desde nuestra máquina atacante y utilizar herr
 ssh -L 9000:127.0.0.1:9000 d4t4s3c@bola.nyx
 ```
 
-![Pasted image 20260820030532.png](<../../../.gitbook/assets/Pasted image 20260820030532.png>)
+![[Pasted image 20260820030532.png]]
 
 Accedemos a `http://localhost:9000` desde el navegador para verificar la disponibilidad del servicio:
 
-![Pasted image 20260820030601.png](<../../../.gitbook/assets/Pasted image 20260820030601.png>)
+![[Pasted image 20260820030601.png]]
 
 #### Inspección del Esquema del Servicio WSDL (SOAP)
 
 Consultamos la definición WSDL navegando al endpoint `http://localhost:9000/wsdl`:
 
-![Pasted image 20260820032203.png](<../../../.gitbook/assets/Pasted image 20260820032203.png>)
+![[Pasted image 20260820032203.png]]
 
 **Estructura del servicio SOAP identificada:**
 
@@ -264,7 +264,7 @@ Capturamos la petición con Burp Suite e intentamos invocar directamente la oper
 </soap:Envelope>
 ```
 
-![Pasted image 20260820032224.png](<../../../.gitbook/assets/Pasted image 20260820032224.png>)
+![[Pasted image 20260820032224.png]]
 
 * **Respuesta del Servidor:** Devuelve `403 Forbidden` con el mensaje `Only allowed in internal networks`, indicando un filtro que bloquea llamadas directas a este método.
 
@@ -290,7 +290,7 @@ Payload final enviado:
 </soapenv:Envelope>
 ```
 
-![Pasted image 20260820033556.png](<../../../.gitbook/assets/Pasted image 20260820033556.png>)
+![[Pasted image 20260820033556.png]]
 
 *   **Impacto Crítico:** El servidor procesa la acción `ExecuteCommand` eludiendo el filtro y devolviendo en la respuesta:
 

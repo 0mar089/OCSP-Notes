@@ -6,7 +6,7 @@
 
 Realizamos un escaneo de puertos en el host objetivo para identificar los servicios activos:
 
-![Escaneo.png](../../../.gitbook/assets/Escaneo.png)
+![[Escaneo.png]]
 
 **Servicios identificados:**
 
@@ -22,7 +22,7 @@ Realizamos un escaneo de puertos en el host objetivo para identificar los servic
 
 Accedemos al servicio FTP utilizando las credenciales por defecto (anonymous:anonymous) para verificar si hay archivos expuestos:
 
-![Pasted image 20260214123231.png](<../../../.gitbook/assets/Pasted image 20260214123231.png>)
+![[Pasted image 20260214123231.png]]
 
 * **Hallazgo:** Del contenido descargado o visualizado en el FTP, logramos extraer posibles nombres de usuarios del sistema: Gonza, Russoski y Nágore.
 
@@ -30,7 +30,7 @@ Accedemos al servicio FTP utilizando las credenciales por defecto (anonymous:ano
 
 Antes de interactuar directamente con la interfaz del servidor web, analizamos las tecnologías empleadas mediante whatweb:
 
-![Pasted image 20260214123429.png](<../../../.gitbook/assets/Pasted image 20260214123429.png>)
+![[Pasted image 20260214123429.png]]
 
 El sitio web no parece utilizar tecnologías complejas o de riesgo evidente.
 
@@ -38,15 +38,15 @@ El sitio web no parece utilizar tecnologías complejas o de riesgo evidente.
 
 Accedemos a la página web en el puerto 80:
 
-![Pasted image 20260214123546.png](<../../../.gitbook/assets/Pasted image 20260214123546.png>)
+![[Pasted image 20260214123546.png]]
 
 Vemos una página informativa de un gimnasio. Si bajamos en la página, hay un formulario para solicitar información o ayuda:
 
-![Pasted image 20260214123619.png](<../../../.gitbook/assets/Pasted image 20260214123619.png>)
+![[Pasted image 20260214123619.png]]
 
 Al completar e interactuar con el formulario, este genera una petición POST enviando los datos correspondientes:
 
-![Pasted image 20260214123717.png](<../../../.gitbook/assets/Pasted image 20260214123717.png>)
+![[Pasted image 20260214123717.png]]
 
 ***
 
@@ -54,7 +54,7 @@ Al completar e interactuar con el formulario, este genera una petición POST env
 
 Para encontrar archivos o rutas ocultas en el servidor web, realizamos fuerza bruta de directorios:
 
-![Pasted image 20260214123809.png](<../../../.gitbook/assets/Pasted image 20260214123809.png>)
+![[Pasted image 20260214123809.png]]
 
 Identificamos dos rutas interesantes que devuelven un código de redirección: /important y /backup. Procedemos a examinarlas:
 
@@ -62,21 +62,21 @@ Identificamos dos rutas interesantes que devuelven un código de redirección: /
 
 Accedemos al directorio y encontramos un archivo llamado important.md:
 
-![Pasted image 20260214123942.png](<../../../.gitbook/assets/Pasted image 20260214123942.png>)
+![[Pasted image 20260214123942.png]]
 
 Al abrir el archivo important.md, contiene información poco relevante o escasa:
 
-![Pasted image 20260214123926.png](<../../../.gitbook/assets/Pasted image 20260214123926.png>)
+![[Pasted image 20260214123926.png]]
 
 #### Ruta /backup
 
 Accedemos al directorio de backups:
 
-![Pasted image 20260214124022.png](<../../../.gitbook/assets/Pasted image 20260214124022.png>)
+![[Pasted image 20260214124022.png]]
 
 Encontramos un archivo de respaldo que nos brinda información crítica:
 
-![Pasted image 20260214124033.png](<../../../.gitbook/assets/Pasted image 20260214124033.png>)
+![[Pasted image 20260214124033.png]]
 
 * **Hallazgo Clave:** Confirmamos que russoski es un usuario válido en el sistema y se menciona que aún no ha cambiado su contraseña.
 
@@ -92,7 +92,7 @@ Con el usuario confirmado (russoski), procedemos a realizar un ataque de fuerza 
 sudo medusa -M ssh -h 172.17.0.2 -u russoski -P /usr/share/wordlists/rockyou.txt -t 10
 ```
 
-![Pasted image 20260214131053.png](<../../../.gitbook/assets/Pasted image 20260214131053.png>)
+![[Pasted image 20260214131053.png]]
 
 * **Credencial encontrada:** russoski:password (verificada en el resultado de medusa).
 * **Acceso:** Establecemos conexión SSH con éxito y obtenemos acceso al servidor con privilegios bajos.
@@ -105,7 +105,7 @@ sudo medusa -M ssh -h 172.17.0.2 -u russoski -P /usr/share/wordlists/rockyou.txt
 
 Una vez dentro como el usuario russoski, listamos el contenido de su directorio personal:
 
-![Pasted image 20260214133103.png](<../../../.gitbook/assets/Pasted image 20260214133103.png>)
+![[Pasted image 20260214133103.png]]
 
 No se observa información confidencial o vectores inmediatos aquí. Procedemos a revisar los privilegios de sudo asignados al usuario:
 
@@ -113,7 +113,7 @@ No se observa información confidencial o vectores inmediatos aquí. Procedemos 
 sudo -l
 ```
 
-![Pasted image 20260214133206.png](<../../../.gitbook/assets/Pasted image 20260214133206.png>)
+![[Pasted image 20260214133206.png]]
 
 * **Vulnerabilidad de Configuración:** El usuario russoski puede ejecutar el editor de texto /usr/bin/vim como root sin proporcionar contraseña (NOPASSWD). Ver teoría en [Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>).
 

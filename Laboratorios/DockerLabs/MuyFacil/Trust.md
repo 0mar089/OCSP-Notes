@@ -6,7 +6,7 @@
 
 Realizamos un escaneo de puertos inicial con nmap para identificar los servicios activos en la máquina objetivo:
 
-![Pasted image 20260624125557.png](<../../../.gitbook/assets/Pasted image 20260624125557.png>)
+![[Pasted image 20260624125557.png]]
 
 **Servicios identificados:**
 
@@ -25,7 +25,7 @@ Al ingresar a la web, nos encontramos con la página por defecto de Apache. Para
 gobuster dir -u 'http://172.17.0.2' -w /usr/share/wordlist/SecLists/Discovery/Web-Content/DirBuster-2007_directory-list-2.3-big.txt -x php,html,txt -t 50 --exclude-length 10701
 ```
 
-![Pasted image 20260624125713.png](<../../../.gitbook/assets/Pasted image 20260624125713.png>)
+![[Pasted image 20260624125713.png]]
 
 * **Hallazgo:** Descubrimos un archivo PHP llamado secret.php.
 
@@ -33,7 +33,7 @@ gobuster dir -u 'http://172.17.0.2' -w /usr/share/wordlist/SecLists/Discovery/We
 
 Accedemos al archivo PHP a través del navegador:
 
-![Pasted image 20260624125858.png](<../../../.gitbook/assets/Pasted image 20260624125858.png>)
+![[Pasted image 20260624125858.png]]
 
 Solo observamos texto estático. Inspeccionamos las peticiones GET y cabeceras de respuesta, pero no encontramos nada adicional. Sin embargo, el contexto del reto sugiere el uso del usuario mario en el sistema.
 
@@ -49,12 +49,12 @@ Utilizando el usuario identificado (mario), procedemos a realizar un ataque de f
 hydra -l mario -P /usr/share/wordlist/Rockyou.txt -t 50 -I ssh://172.17.0.2
 ```
 
-![Pasted image 20260624130031.png](<../../../.gitbook/assets/Pasted image 20260624130031.png>)
+![[Pasted image 20260624130031.png]]
 
 * **Credencial encontrada:** mario:chocolate (verificada en el resultado de hydra).
 * **Acceso:** Iniciamos sesión vía SSH en el servidor:
 
-![Pasted image 20260624130050.png](<../../../.gitbook/assets/Pasted image 20260624130050.png>)
+![[Pasted image 20260624130050.png]]
 
 ***
 
@@ -68,7 +68,7 @@ Como usuario de bajos privilegios mario, verificamos qué comandos podemos ejecu
 sudo -l
 ```
 
-![Pasted image 20260624130232.png](<../../../.gitbook/assets/Pasted image 20260624130232.png>)
+![[Pasted image 20260624130232.png]]
 
 * **Vulnerabilidad de Configuración:** El usuario mario puede ejecutar el binario /usr/bin/vim como root sin necesidad de contraseña (NOPASSWD). Ver teoría en [Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>).
 
@@ -88,7 +88,7 @@ Dentro del editor de texto, ejecutamos el siguiente comando:
 :!bash
 ```
 
-![Pasted image 20260624130345.png](<../../../.gitbook/assets/Pasted image 20260624130345.png>)
+![[Pasted image 20260624130345.png]]
 
 ¡Logramos obtener una shell con permisos de root con control absoluto de la máquina!
 
