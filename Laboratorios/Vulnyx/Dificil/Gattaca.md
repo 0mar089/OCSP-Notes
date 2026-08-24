@@ -228,5 +228,5 @@ tcp       LISTEN     0          32                    0.0.0.0:21                
 tcp       LISTEN     0          511                         *:80                        *:*      
 ```
 
-
+El problema esque solo esta abierto desde dentro. 
 
