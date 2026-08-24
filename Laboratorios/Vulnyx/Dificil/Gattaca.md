@@ -151,5 +151,25 @@ stty rows 29 columns 111
 
 AHora intentaremos subir privilegios ya que somos www-data. 
 
+Al buscar entre carpetas, vemos un archivo llamado ftppolicy.txt:
+
+![[Pasted image 20260824200147.png]]
+
+(Antiravity te pego esteo para que hagas un miniresumillo cuando resumas esto)
+
+``` 
+** IMPORTANT **
+Remember, when changing your password it must contain these requirements:
+
+1. Must be 8 characters or longer
+2. Must contain numbers
+3. Must contain special characters
+
+
+Don't waste time with v.freeman and rockyou.txt
+
+```
+
+Asi que sabemos que el usuario v.freeman no es el que queremos sino el i.cassini y la wordlist rockyou no funcionará. Asi que hay que hacer OSINT y crear una worfdlist especial para este usuario. 
 
 
