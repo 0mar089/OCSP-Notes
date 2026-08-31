@@ -1,4 +1,3 @@
-# Autoescuela
 
 EMpezamos con el escaneo nmap:
 

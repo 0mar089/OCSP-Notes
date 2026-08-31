@@ -1,4 +1,3 @@
-# Internal
 
 ### Fase de Reconocimiento y Descubrimiento (Enumeración)
 

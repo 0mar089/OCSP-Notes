@@ -1,4 +1,3 @@
-# Allien
 
 Hacemos el escaneo nmap:
 

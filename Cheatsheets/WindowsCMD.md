@@ -6,22 +6,22 @@ Guía de comandos de consola de comandos (cmd.exe) estructurada por categorías 
 
 ## Navegación y Gestión de Archivos
 
-| Comando | Descripción | Ejemplo de Uso |
-| :--- | :--- | :--- |
-| dir | Lista archivos y carpetas del directorio actual. | dir /a /od |
-| cd | Cambia el directorio de trabajo. | cd C:\Users |
-| mkdir / md | Crea una nueva carpeta. | mkdir NuevaCarpeta |
-| rmdir / rd | Elimina una carpeta. | rd /s /q Carpeta |
-| copy | Copia uno o más archivos. | copy archivo.txt C:\Destino |
-| xcopy | Copia archivos y árboles de directorios. | xcopy /s /e C:\Origen C:\Destino |
-| robocopy | Copia avanzada y robusta de archivos/directorios. | robocopy Origen Destino /mir |
-| move | Mueve archivos y renombra directorios. | move *.txt C:\Destino |
-| del / erase | Elimina uno o más archivos. | del /f /q temporal.txt |
-| ren / rename | Renombra un archivo o directorio. | ren viejo.txt nuevo.txt |
-| type | Muestra el contenido de un archivo de texto. | type config.json |
-| attrib | Muestra o cambia los atributos de los archivos. | attrib +h +r secreto.txt |
-| tree | Muestra gráficamente la estructura de carpetas. | tree /f |
-| where | Localiza archivos que coinciden con un patrón. | where java |
+| Comando      | Descripción                                       | Ejemplo de Uso                   |
+| :----------- | :------------------------------------------------ | :------------------------------- |
+| dir          | Lista archivos y carpetas del directorio actual.  | dir /a /od                       |
+| cd           | Cambia el directorio de trabajo.                  | cd C:\Users                      |
+| mkdir / md   | Crea una nueva carpeta.                           | mkdir NuevaCarpeta               |
+| rmdir / rd   | Elimina una carpeta.                              | rd /s /q Carpeta                 |
+| copy         | Copia uno o más archivos.                         | copy archivo.txt C:\Destino      |
+| xcopy        | Copia archivos y árboles de directorios.          | xcopy /s /e C:\Origen C:\Destino |
+| robocopy     | Copia avanzada y robusta de archivos/directorios. | robocopy Origen Destino /mir     |
+| move         | Mueve archivos y renombra directorios.            | move *.txt C:\Destino            |
+| del / erase  | Elimina uno o más archivos.                       | del /f /q temporal.txt           |
+| ren / rename | Renombra un archivo o directorio.                 | ren viejo.txt nuevo.txt          |
+| type         | Muestra el contenido de un archivo de texto.      | type config.json                 |
+| attrib       | Muestra o cambia los atributos de los archivos.   | attrib +h +r secreto.txt         |
+| tree         | Muestra gráficamente la estructura de carpetas.   | tree /f                          |
+| where        | Localiza archivos que coinciden con un patrón.    | where java                       |
 
 ---
 

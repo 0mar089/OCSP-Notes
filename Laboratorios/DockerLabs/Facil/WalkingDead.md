@@ -1,4 +1,3 @@
-# WalkingDead
 
 ### Fase de Reconocimiento y Descubrimiento (Enumeración)
 

@@ -1,4 +1,3 @@
-# Elevator
 
 ### Fase de Reconocimiento y Descubrimiento (Enumeración)
 
@@ -38,7 +37,7 @@ Debido a que no contamos con una interfaz gráfica web directa para la subida de
 
 ![[Pasted image 20260629002120.png]]
 
-La validación del lado del servidor restringe la subida únicamente a extensiones de imagen JPG. Para evadir esta restricción y ejecutar código malicioso, subimos un script de PHP pero utilizando una doble extensión o renombrado (ej. archivo PHP con extensión final .jpg). Ver teoría sobre evasión de filtros de subida en [Path Traversal Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md>).
+La validación del lado del servidor restringe la subida únicamente a extensiones de imagen JPG. Para evadir esta restricción y ejecutar código malicioso, subimos un script de PHP pero utilizando una doble extensión o renombrado (ej. archivo PHP con extensión final .jpg). Ver teoría sobre evasión de filtros de subida en [File Upload Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/05-File_Upload_Attack/Cheat Sheet.md>).
 
 ![[Pasted image 20260629002211.png]]
 
@@ -146,5 +145,5 @@ Enumeramos los permisos de sudo de `scooby`:
 
 ### Relaciones y Conceptos
 
-* **Teoría:** [Linux Privilege Escalation - Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>), [Path Traversal Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md>), [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>)
+* **Teoría:** [Linux Privilege Escalation - Permissions.md](<../../../Pentesting Notes/3_Post-Explotation/Linux Privilage Escalation/Permissions.md>), [File Upload Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/05-File_Upload_Attack/Cheat Sheet.md>), [Path Traversal Cheat Sheet](<../../../Pentesting Notes/Web/Vulnerabilities/02-Path_Traversal/Cheat Sheet.md>), [HTTP & HTTPS.md](<../../../Pentesting Notes/1_Enumeration/HTTP & HTTPS.md>)
 * **Laboratorios Relacionados:** [Duque](Duque.md) (Comparte escalada por env), [Vacaciones](../MuyFacil/Vacaciones.md) (Comparte pivotaje por ruby)

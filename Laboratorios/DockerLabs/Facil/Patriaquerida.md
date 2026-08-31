@@ -1,4 +1,3 @@
-# Patriaquerida
 
 ### Fase de Reconocimiento y Descubrimiento (Enumeración)
 

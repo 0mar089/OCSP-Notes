@@ -1,4 +1,3 @@
-# Swamp
 
 ### Fase de Reconocimiento y Descubrimiento (Enumeración)
 
